@@ -1,0 +1,55 @@
+,States,Number_of_deaths,Number_of_wounded,number_of_attacks
+0,Alabama,12.0,4.0,13
+1,Alaska,0.0,0.0,1
+2,Arizona,82.0,5.0,32
+3,Arkansas,1.0,2.0,3
+4,California,147.0,86.0,484
+5,Colorado,15.0,7.0,39
+6,Connecticut,4.0,1.0,16
+7,Delaware,0.0,0.0,4
+8,District of Columbia,9.0,10.0,57
+9,Florida,88.0,85.0,114
+10,Georgia,102.0,8.0,31
+11,Hawaii,16.0,2.0,4
+12,Idaho,0.0,0.0,12
+13,Illinois,35.0,5.0,97
+14,Indiana,3.0,4.0,19
+15,Iowa,40.0,0.0,19
+16,Kansas,5.0,5.0,11
+17,Kentucky,3.0,2.0,5
+18,Louisiana,35.0,19.0,19
+19,Maine,0.0,0.0,2
+20,Maryland,1.0,6.0,24
+21,Massachusetts,315.0,11.0,47
+22,Michigan,9.0,3.0,41
+23,Minnesota,17.0,2.0,23
+24,Mississippi,1.0,1.0,7
+25,Missouri,8.0,1.0,25
+26,Montana,5.0,2.0,6
+27,Nebraska,7.0,1.0,21
+28,Nevada,852.0,65.0,11
+29,New Hampshire,0.0,0.0,6
+30,New Jersey,5.0,9.0,43
+31,New Mexico,0.0,3.0,18
+32,New York,22135.0,2841.0,427
+33,North Carolina,19.0,9.0,28
+34,North Dakota,1.0,2.0,5
+35,Ohio,17.0,8.0,43
+36,Oklahoma,677.0,170.0,15
+37,Oregon,791.0,12.0,65
+38,Pennsylvania,38.0,74.0,38
+39,Puerto Rico,28.0,18.0,175
+40,Rhode Island,0.0,0.0,2
+41,South Carolina,0.0,9.0,3
+42,South Dakota,2.0,2.0,9
+43,Tennessee,19.0,11.0,15
+44,Texas,84.0,39.0,55
+45,U.S. Virgin Islands,0.0,0.0,3
+46,Unknown,0.0,0.0,1
+47,Utah,3.0,3.0,20
+48,Vermont,0.0,0.0,4
+49,Virginia,145.0,196.0,34
+50,Washington,8.0,6.0,88
+51,West Virginia,0.0,0.0,2
+52,Wisconsin,9.0,9.0,34
+53,Wyoming,0.0,0.0,3

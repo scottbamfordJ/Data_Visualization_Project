@@ -39,13 +39,13 @@ let bargraph = {
 * */
 Promise.all([
  d3.json("../data/usState.json"),
- d3.csv("../Project/Data/State_Data.csv"),
- d3.csv("../Project/Data/UnitedStatesTerrorism.csv")
+ d3.csv("../data/State_Data.csv"),
+ d3.csv("../data/UnitedStatesTerrorism.csv")
 ]).then(([geojson, terrorist_state_data, full_data]) => {
  state.geojson = geojson
  state.terrorist_state_data = terrorist_state_data
  state.full_data = full_data
-//  console.log("state: ", state);
+console.log("state: ", state);
  init();
 });
 
@@ -175,9 +175,9 @@ function draw2() {
         .attr("x", d => {
           return xScale(d[0])
         } )
-        .attr("y",  d => yScale(d[1]) - margin_1)
+        .attr("y",  d => yScale(d[1]))
         .attr("width", xScale.bandwidth())
-        .attr("height", d =>  height - yScale(d[1]))
+        .attr("height", d =>  height_1 - margin_1 - yScale(d[1]))
         .attr("fill", "black")
     bargraph.append('g')
         .call( xAxis )
