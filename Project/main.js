@@ -6,7 +6,7 @@
     margin = { top: 20, bottom: 50, left: 60, right: 40 };
 const width_1 = 1000,
     height_1 = 800,
-    margin_1 = 30,
+    margin_1 = 200,
     radius_1 = 5;
 
 let svg, 
@@ -54,11 +54,11 @@ console.log("state: ", state);
 * this will be run *one time* when the data finishes loading in
 * */
 function init() {
- const colorScale = d3.scaleSequential()
-    .interpolator(d3.interpolateOrRd)
-    .domain(d3.extent(state.terrorist_state_data, d=> d['number_of_attacks']))
-const attacksLookup = new Map(state.terrorist_state_data.map(d=> [
-    d['States'], d['number_of_attacks']
+    const colorScale = d3.scaleSequential()
+        .interpolator(d3.interpolateOrRd)
+        .domain(d3.extent(state.terrorist_state_data, d=> d['number_of_attacks']))
+    const attacksLookup = new Map(state.terrorist_state_data.map(d=> [
+        d['States'], d['number_of_attacks']
 ]))
 
 const statelookup = new Map(state.full_data.map(d=> [d['province'] , d['iyear']]))
@@ -142,71 +142,133 @@ function draw() {
         
 }   
 function draw2() {
+    /* Making Hover Box Stuff */
+
+    hover_bargraph = d3.select("#hover-bargraph")
 
     /* Making Scales and Axis */
+
     xScale = d3.scaleBand ()
         .domain(state.bargraph.Organizations)
         .range([margin_1, width_1 - margin_1])
-        .padding(0.1)
+        .padding(0.2)
+
     yScale = d3.scaleLinear()
         .domain([0, d3.max(state.bargraph.Attacks_Done)])
-        // console.log(d3.max(state.bargraph.X))
-        .range([height_1 - margin_1, margin_1])   
+        .range([height_1 - margin_1, margin_1])  
+
     xAxis = d3.axisBottom(xScale)
-      // .tickSizeOuter(10)
       .scale(xScale)
     yAxis = d3.axisLeft(yScale)
-      // .ticks(10, ",f")
       .scale(yScale)
-    console.log(state.bargraph)
-    console.log(state.bargraph.Organizations)
-    console.log(state.bargraph.Attacks_Done)
-    console.log(d3.max(state.bargraph.Attacks_Done))
-    console.log(xScale.bandwidth())
     const bargraph = d3.select("#bargraph")
         .append("svg")
         .attr("width", width_1)
         .attr("height", height_1) 
-        .style("background-color", "pink")
-    bargraph.selectAll(".bar")
+    bargraph_1 = bargraph.selectAll(".bar")
         .data(state.bargraph)
         .enter().append("rect")
         .attr("class", "bar")
+        // .on("mousemove", organization_name)
         .attr("x", d => {
           return xScale(d[0])
         } )
         .attr("y",  d => yScale(d[1]))
         .attr("width", xScale.bandwidth())
         .attr("height", d =>  height_1 - margin_1 - yScale(d[1]))
-        .attr("fill", "black")
+        .attr("fill", "lightblue")
     bargraph.append('g')
         .call( xAxis )
         .attr('class', 'x-axis')
         .style("transform", `translate(0px,${height_1 - margin_1}px)`)
         // .attr("dx", "2em")
-        
+    
     bargraph.append('g')
         .call(yAxis)
         .attr('class', 'y-axis')
         .style("transform", `translate(${margin_1}px,0px)`)
-        
+    /* Making Hover For Name of groups? 
+    
+            STILL WORKING ON IT!
+    */
+
+
+    // function organization_name (d,i) {
+    //     console.log(state.bargraph.Organizations[i])
+    // }
+    // bargraph_1.on("mousemove", (ev, d) => {
+    //     state.bargraph.hover_bargraph = state.bargraph.Organizations
+    //     state.bargraph.hover_attacks = state.bargraph.Attacks_Done
+    // })
+    
     /* needs an Update clauser to prevent mulitple's from being used */
 }
 
+function draw_horizontal(){
+
+    // xScale = d3.scaleLinear()
+    //     .domain([0, d3.max(state.bargraph.Attacks_Done)])
+    //     .range([0, width]);
+    // yScale = d3.scaleBand()
+    //     .domain(state.bargraph.Organizations)
+    //     .padding(0.2)
+
+    // const bargraph = d3.select("#bargraph")
+    //     .append("svg")
+    //     .attr("width", width_1)
+    //     .attr("height", height_1)
+
+    // bargraph.selectAll(".bar")
+    //     .data(state.bargraph)
+    //     .enter().append("rect")
+    //     .attr("class", "bar")
+    //     .attr("x", d => {
+    //         return yScale(d[0])
+    //     })
+    //     .attr("y", yScale)
+    //     .attr("width", d => xScale(d[1]))
+    //     .attr("height", yScale)
 
 
-/** 
- * Creating New BarChart Which shows the Groups involved in the specific attacks
- */
 
-// let svg2, xScale, yScale, XAxis, xAxisGroup, yAxisGroup, yAxis, colorScale2
-// let states = {
-//     data: [],
-//     selected_state : []
-// }
+    // xScale = d3.scaleLinear()
+    //     .domain([0, d3.max(state.bargraph.Attacks_Done)])
+    //     // console.log(d3.max(state.bargraph.X))
+    //     .range([margin_1, width_1 - margin_1])
+    // yScale = d3.scaleBand ()
+    //     .domain(state.bargraph.Organizations)
+    //     .range([height_1 - margin_1, margin_1])   
+    //     .padding(0.1)
+    // xAxis = d3.axisBottom(xScale)
+    //     // .tickSizeOuter(10)
+    //     .scale(xScale)
+    // yAxis = d3.axisLeft(yScale)
+    //   // .ticks(10, ",f")
+    //   .scale(yScale)
+    // const bargraph = d3.select("#bargraph")
+    //   .append("svg")
+    //   .attr("width", width_1)
+    //   .attr("height", height_1) 
+    // bargraph.selectAll(".bar")
+    //     .data(state.bargraph)
+    //     .enter().append("rect")
+    //     .attr("class", "bar")
+    //     .attr("x", d => xScale(d[1])
+    //     .attr("y", d => {
+    //          return yScale(d[0])
+    //         }))
+    //     .attr("width", yScale.bandwidth())
+    //     .attr("height", d =>  width_1 - margin_1 - xScale(d[1]))
+    //     .attr("fill", "black")
+    // bargraph.append('g')
+    //     .call( xAxis )
+    //     .attr('class', 'x-axis')
+    //     .style("transform", `translate(0px,${height_1 - margin_1}px)`)
+    //     // .attr("dx", "2em")
 
-// d3.csv("../Project/Data/UnitedStatesTerrorism.csv", d3.autoType.then(raw_data =>{
-//     state.data = raw_data;
-//     console.log('state:>>', state);
-
-// })
+    // bargraph.append('g')
+    //     .call(yAxis)
+    //     .attr('class', 'y-axis')
+    //     .style("transform", `translate(${margin_1}px,0px)`)
+    // }
+}
