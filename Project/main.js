@@ -101,7 +101,9 @@ usSates.on("click", (ev, d) => {
     state.bargraph = d3.rollup(state.click_info, v => v.length, d => d.gname)
     state.bargraph.Attacks_Done = Array.from(state.bargraph.values())
     state.bargraph.Organizations = Array.from(state.bargraph.keys())
-    draw2();
+    console.log(state.bargraph.Organizations)
+    console.log(state.bargraph.Attacks_Done)
+    draw_horizontal();
    
 })
 /* 
@@ -206,28 +208,53 @@ function draw2() {
 
 function draw_horizontal(){
 
-    // xScale = d3.scaleLinear()
-    //     .domain([0, d3.max(state.bargraph.Attacks_Done)])
-    //     .range([0, width]);
-    // yScale = d3.scaleBand()
-    //     .domain(state.bargraph.Organizations)
-    //     .padding(0.2)
+    hover_bargraph = d3.select("#hover-bargraph")
 
-    // const bargraph = d3.select("#bargraph")
-    //     .append("svg")
-    //     .attr("width", width_1)
-    //     .attr("height", height_1)
+    /* Making Scales and Axis */
 
-    // bargraph.selectAll(".bar")
-    //     .data(state.bargraph)
-    //     .enter().append("rect")
-    //     .attr("class", "bar")
-    //     .attr("x", d => {
-    //         return yScale(d[0])
-    //     })
-    //     .attr("y", yScale)
-    //     .attr("width", d => xScale(d[1]))
-    //     .attr("height", yScale)
+    yScale = d3.scaleBand ()
+        .domain(state.bargraph.Organizations)
+        .range([ height_1 - margin_1, margin_1])
+        .padding(0.2)
+
+    xScale = d3.scaleLinear()
+    // Using the 0, as the starting point, and having to duble subtract margins ( Look a tbargraph.append("g" style.) )
+        .domain([0, d3.max(state.bargraph.Attacks_Done)])
+        .range([ 0, width_1 - margin_1 - margin_1])  
+    console.log(xScale.domain())
+    yAxis = d3.axisRight(yScale)
+      .scale(yScale)
+    xAxis = d3.axisBottom(xScale)
+      .scale(xScale)
+    const bargraph = d3.select("#bargraph")
+        .append("svg")
+        .attr("width", width_1)
+        .attr("height", height_1) 
+    bargraph_1 = bargraph.selectAll(".bar")
+        .data(state.bargraph)
+        .enter().append("rect")
+        .attr("class", "bar")
+        // .on("mousemove", organization_name)
+        .attr("y", d => {
+          return yScale(d[0])
+        } )
+        // .attr("x",  d => yScale(d[1]))
+        .attr("x",  margin_1)
+        // .attr("width", d =>  width_1 - margin_1 - xScale(d[1]))
+        .attr("width", d => xScale(d[1]))
+        .attr("height", yScale.bandwidth)
+        .attr("fill", "lightblue")
+        .on("click", (e, d) => console.log(e,d))
+    bargraph.append('g')
+        .call( xAxis )
+        .attr('class', 'x-axis')
+        .style("transform", `translate(${margin_1}px,${height_1 - margin_1}px)`)
+        // .attr("dx", "2em")
+    
+    bargraph.append('g')
+        .call(yAxis)
+        .attr('class', 'y-axis')
+        .style("transform", `translate(${margin_1}px,0px)`)
 
 
 
