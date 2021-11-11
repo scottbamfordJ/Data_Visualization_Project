@@ -28,7 +28,8 @@ let state = {
     terrorist_state_data: [],
     all_attacks: [],
     selected_state: "Select A State",
-    bargraph: []
+    bargraph: [],
+    bargraph_2: []
     };
 let bargraph = {
     
@@ -161,7 +162,7 @@ function draw2() {
 
     xAxis = d3.axisBottom(xScale)
       .scale(xScale)
-    yAxis = d3.axisLeft(yScale)
+    yAxis = d3.axisRight(yScale)
       .scale(yScale)
     const bargraph = d3.select("#bargraph")
         .append("svg")
@@ -205,9 +206,9 @@ function draw2() {
     
     /* needs an Update clauser to prevent mulitple's from being used */
 }
-
+// function get_info(e, d){}
 function draw_horizontal(){
-
+    const stoarge_graph2 = state.click_info
     hover_bargraph = d3.select("#hover-bargraph")
 
     /* Making Scales and Axis */
@@ -244,7 +245,21 @@ function draw_horizontal(){
         .attr("width", d => xScale(d[1]))
         .attr("height", yScale.bandwidth)
         .attr("fill", "lightblue")
-        .on("click", (e, d) => console.log(e,d))
+
+        /* on click function for the output */
+        // State creation use state_click info - > refer to above. 
+        .on("click", (e, d) => {
+            console.log(d[0])
+            state.Bargraph_2Seleceted = d[0]
+            state.Bargraph_2info = stoarge_graph2.filter(function(d){
+                return d.gname == state.Bargraph_2Seleceted
+                });
+            // state.Bargraph_2 = d3.rollup(state.Bargraph_2.info, v => v.length, d => d.gname)
+            // state.Bargraph_2.Attacks_Done = Array.from(state.Bargraph_2.info.values())
+            // state..Bargraph_2.Organizations = Array.from(state.Bargraph_2.info.keys())
+        })
+        //state.click_state id's the state of the group selected
+        //d is the actual organization name. 
     bargraph.append('g')
         .call( xAxis )
         .attr('class', 'x-axis')
