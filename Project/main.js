@@ -5,7 +5,7 @@
     height = 800,
     margin = { top: 20, bottom: 50, left: 60, right: 40 };
 const width_1 = 1000,
-    height_1 = 800,
+    height_1 = 1000,
     margin_1 = 200,
     radius_1 = 5;
 
@@ -208,7 +208,7 @@ function draw2() {
 }
 // function get_info(e, d){}
 function draw_horizontal(){
-    const stoarge_graph2 = state.click_info
+    const storage_Graph2 = state.click_info
     hover_bargraph = d3.select("#hover-bargraph")
 
     /* Making Scales and Axis */
@@ -249,11 +249,16 @@ function draw_horizontal(){
         /* on click function for the output */
         // State creation use state_click info - > refer to above. 
         .on("click", (e, d) => {
-            console.log(d[0])
             state.Bargraph_2Seleceted = d[0]
-            state.Bargraph_2info = stoarge_graph2.filter(function(d){
+            state.Bargraph_2info = storage_Graph2.filter(function(d){
                 return d.gname == state.Bargraph_2Seleceted
                 });
+            storage_scatter = state.Bargraph_2info
+            console.log(storage_scatter)
+            state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v, d => d.nkill), d => d.iyear)
+            state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => d.nwound), d => d.iyear)
+            // This is where Organization Specific Information is stored. (state.Bargraph_2info)
+            draw_scatter_init()
             // state.Bargraph_2 = d3.rollup(state.Bargraph_2.info, v => v.length, d => d.gname)
             // state.Bargraph_2.Attacks_Done = Array.from(state.Bargraph_2.info.values())
             // state..Bargraph_2.Organizations = Array.from(state.Bargraph_2.info.keys())
@@ -312,4 +317,37 @@ function draw_horizontal(){
     //     .attr('class', 'y-axis')
     //     .style("transform", `translate(${margin_1}px,0px)`)
     // }
+}
+function draw_scatter_init(){
+    xScale_scatter = d3.scaleTime()
+        .domain([1970, 2018])
+        .range([margin_1, width_1 - margin_1])
+    yScale_scatter = d3.scaleLinear()
+        .domain(d3.extent(storage_scatter, d=> d.nkill))
+        .range([height_1 - margin_1, margin_1])
+
+    scatter = d3.select("#scatter-plot")
+        .append("svg")
+        .attr("width", width_1)
+        .attr("height", height_1)
+    draw_scatter()
+}
+function draw_scatter() {    
+    //ALL INFO IS IN state.Bargraph_2info
+    console.log(state.scatter_plot_wounded)
+    console.log(state.scatter_plot_kills)
+    const lineGen = d3.line()
+        .x(d=> xScale_scatter(d.iyear))
+        .y(d => yScale_scatter(state.scatter_plot_kills))
+scatter.selectAll(".trend")
+    .data(state.scatter_plot_kills)
+    .join("path")
+    .attr("class", "trend")
+    .attr("stroke", "black")
+    .attr("fill", "none")
+    .attr("d", d => lineGen(d))
+
+
+
+
 }
