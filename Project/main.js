@@ -272,7 +272,6 @@ function draw_horizontal(){
         .style("transform", `translate(${margin_1}px,0px)`)
 
 
-
     // xScale = d3.scaleLinear()
     //     .domain([0, d3.max(state.bargraph.Attacks_Done)])
     //     // console.log(d3.max(state.bargraph.X))
