@@ -22,7 +22,6 @@ let colorScale
 /**
 * APPLICATION STATE
 * */
-
 let state = {
     geojson: [],
     terrorist_state_data: [],
@@ -255,10 +254,11 @@ function draw_horizontal(){
                 });
             storage_scatter = state.Bargraph_2info
             console.log(storage_scatter)
-            state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v, d => d.nkill), d => d.iyear)
-            state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => d.nwound), d => d.iyear)
+            state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v, d => d.nkill), d => new Date(+d.iyear, 0 ,1))
+            state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => d.nwound), d => new Date(+d.iyear, 0 ,1))
+            console.log(storage_scatter)
             // This is where Organization Specific Information is stored. (state.Bargraph_2info)
-            draw_scatter_init()
+            draw_scatter()
             // state.Bargraph_2 = d3.rollup(state.Bargraph_2.info, v => v.length, d => d.gname)
             // state.Bargraph_2.Attacks_Done = Array.from(state.Bargraph_2.info.values())
             // state..Bargraph_2.Organizations = Array.from(state.Bargraph_2.info.keys())
@@ -277,77 +277,56 @@ function draw_horizontal(){
         .style("transform", `translate(${margin_1}px,0px)`)
 
 
-    // xScale = d3.scaleLinear()
-    //     .domain([0, d3.max(state.bargraph.Attacks_Done)])
-    //     // console.log(d3.max(state.bargraph.X))
-    //     .range([margin_1, width_1 - margin_1])
-    // yScale = d3.scaleBand ()
-    //     .domain(state.bargraph.Organizations)
-    //     .range([height_1 - margin_1, margin_1])   
-    //     .padding(0.1)
-    // xAxis = d3.axisBottom(xScale)
-    //     // .tickSizeOuter(10)
-    //     .scale(xScale)
-    // yAxis = d3.axisLeft(yScale)
-    //   // .ticks(10, ",f")
-    //   .scale(yScale)
-    // const bargraph = d3.select("#bargraph")
-    //   .append("svg")
-    //   .attr("width", width_1)
-    //   .attr("height", height_1) 
-    // bargraph.selectAll(".bar")
-    //     .data(state.bargraph)
-    //     .enter().append("rect")
-    //     .attr("class", "bar")
-    //     .attr("x", d => xScale(d[1])
-    //     .attr("y", d => {
-    //          return yScale(d[0])
-    //         }))
-    //     .attr("width", yScale.bandwidth())
-    //     .attr("height", d =>  width_1 - margin_1 - xScale(d[1]))
-    //     .attr("fill", "black")
-    // bargraph.append('g')
-    //     .call( xAxis )
-    //     .attr('class', 'x-axis')
-    //     .style("transform", `translate(0px,${height_1 - margin_1}px)`)
-    //     // .attr("dx", "2em")
 
-    // bargraph.append('g')
-    //     .call(yAxis)
-    //     .attr('class', 'y-axis')
-    //     .style("transform", `translate(${margin_1}px,0px)`)
-    // }
 }
-function draw_scatter_init(){
+
+
+
+
+function draw_scatter() {  
+    
+    var parse = d3.timeParse("%Y")
+
+    console.log(storage_scatter)
+    console.log(state.scatter_plot_kills )
+    console.log(state.scatter_plot_wounded)
     xScale_scatter = d3.scaleTime()
-        .domain([1970, 2018])
+        .domain([parse(1970), parse(2018)])
         .range([margin_1, width_1 - margin_1])
     yScale_scatter = d3.scaleLinear()
         .domain(d3.extent(storage_scatter, d=> d.nkill))
         .range([height_1 - margin_1, margin_1])
+    const xAxis_scatter = d3.axisBottom(xScale_scatter)
+
+    const yAxis_scatter = d3.axisLeft(yScale_scatter)
 
     scatter = d3.select("#scatter-plot")
         .append("svg")
         .attr("width", width_1)
         .attr("height", height_1)
-    draw_scatter()
-}
-function draw_scatter() {    
+    xAxisGroup = scatter.append("g")
+        .attr('class', 'xAxis')
+        .attr("transform", `translate(${0}, ${height - margin.bottom})`)
+        .call(xAxis_scatter)
+    xAxisGroup.append("text")
+        .attr("class", "xLabel")
+        .attr("transform", 'translate(${width / 2}, ${35})')
+        .text("Year")
+    yAxisGroup = scatter.append("g")
+        .atttr("class", "yAxis")
+        .attr("transform", `translate(${margin.right}, ${0})`)
+        .call(yAxis_scatter)
     //ALL INFO IS IN state.Bargraph_2info
     console.log(state.scatter_plot_wounded)
     console.log(state.scatter_plot_kills)
     const lineGen = d3.line()
         .x(d=> xScale_scatter(d.iyear))
         .y(d => yScale_scatter(state.scatter_plot_kills))
-scatter.selectAll(".trend")
-    .data(state.scatter_plot_kills)
-    .join("path")
-    .attr("class", "trend")
-    .attr("stroke", "black")
-    .attr("fill", "none")
-    .attr("d", d => lineGen(d))
-
-
-
-
+    scatter.selectAll(".trend")
+        .data(state.scatter_plot_kills)
+        .join("path")
+        .attr("class", "trend")
+        .attr("stroke", "black")
+        .attr("fill", "none")
+        .attr("d", d => lineGen(d))
 }
