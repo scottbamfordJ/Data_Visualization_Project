@@ -99,7 +99,9 @@ usSates.on("click", (ev, d) => {
         return d.provstate == state.click_state
     });
     state.bargraph = d3.rollup(state.click_info, v => v.length, d => d.gname)
+    
     state.bargraph.Attacks_Done = Array.from(state.bargraph.values())
+    console.log(state.bargraph.Attacks_Done)
     state.bargraph.Organizations = Array.from(state.bargraph.keys())
     console.log(state.bargraph.Organizations)
     console.log(state.bargraph.Attacks_Done)
@@ -213,6 +215,8 @@ function draw_horizontal(){
     /* Making Scales and Axis */
 
     yScale = d3.scaleBand ()
+    //Order the data
+    //Make bar pop out 
         .domain(state.bargraph.Organizations)
         .range([ height_1 - margin_1, margin_1])
         .padding(0.2)
@@ -253,12 +257,19 @@ function draw_horizontal(){
                 return d.gname == state.Bargraph_2Seleceted
                 });
             storage_scatter = state.Bargraph_2info
-            console.log(storage_scatter)
-            state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v, d => d.nkill), d => new Date(+d.iyear, 0 ,1))
-            state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => d.nwound), d => new Date(+d.iyear, 0 ,1))
-            console.log(storage_scatter)
+            // Pulled this out of Scatter_plot_kills for i year ( d => new Date(+d.iyear, 0 ,1))
+            state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d => d.iyear)
+            state.scatter_plot_kills.keys = Array.from(state.scatter_plot_kills.keys())
+            state.scatter_plot_kills.value = Array.from(state.scatter_plot_kills.values())
+            state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => new Date(+d.iyear, 0 ,1))
+            state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
+            state.scatter_plot_wounded.keys = Array.from(state.scatter_plot_wounded.keys())
+            // state.scatter_plot_wounded.Number = Array.from(state.scatter_plot_wounded.values())
+            // state.scatter_plot_kills.Number = Array.from(state.scaatter_plot_kills.values())
+
+            // console.log(storage_scatter)
             // This is where Organization Specific Information is stored. (state.Bargraph_2info)
-            draw_scatter()
+            console_area()
             // state.Bargraph_2 = d3.rollup(state.Bargraph_2.info, v => v.length, d => d.gname)
             // state.Bargraph_2.Attacks_Done = Array.from(state.Bargraph_2.info.values())
             // state..Bargraph_2.Organizations = Array.from(state.Bargraph_2.info.keys())
@@ -280,22 +291,43 @@ function draw_horizontal(){
 
 }
 
+function console_area(){ 
+    console.log(state.scatter_plot_kills)
+    console.log(state.scatter_plot_kills.value)
+    console.log(state.scatter_plot_kills.keys)
+    console.log(state.scatter_plot_kills.values())
+}
 
 
 
 function draw_scatter() {  
-    
+
+    ///https://stackoverflow.com/questions/24855630/d3-skip-null-values-in-line-graph-with-several-lines
+    ///https://observablehq.com/@d3/line-with-missing-data
+
+    test_storage = state.scatter_plot_kills
+    console.log(test_storage)
     var parse = d3.timeParse("%Y")
 
-    console.log(storage_scatter)
-    console.log(state.scatter_plot_kills )
-    console.log(state.scatter_plot_wounded)
+    xScale = d3.scaleLinear()
+    // Using the 0, as the starting point, and having to duble subtract margins ( Look a tbargraph.append("g" style.) )
+        .domain([0, d3.max(state.bargraph.Attacks_Done)])
+        .range([ 0, width_1 - margin_1 - margin_1])  
+    console.log(xScale.domain())
+    yAxis = d3.axisRight(yScale)
+      .scale(yScale)
+    xAxis = d3.axisBottom(xScale)
+      .scale(xScale)
+    // console.log(storage_scatter)
+    // console.log(state.scatter_plot_kills )
+    // console.log(state.scatter_plot_wounded)
     xScale_scatter = d3.scaleTime()
         .domain([parse(1970), parse(2018)])
         .range([margin_1, width_1 - margin_1])
     yScale_scatter = d3.scaleLinear()
-        .domain(d3.extent(storage_scatter, d=> d.nkill))
+        .domain(d3.extent(storage_scatter, d=> d.nkills))
         .range([height_1 - margin_1, margin_1])
+    console.log(yScale_scatter)
     const xAxis_scatter = d3.axisBottom(xScale_scatter)
 
     const yAxis_scatter = d3.axisLeft(yScale_scatter)
@@ -306,19 +338,14 @@ function draw_scatter() {
         .attr("height", height_1)
     xAxisGroup = scatter.append("g")
         .attr('class', 'xAxis')
-        .attr("transform", `translate(${0}, ${height - margin.bottom})`)
         .call(xAxis_scatter)
     xAxisGroup.append("text")
         .attr("class", "xLabel")
-        .attr("transform", 'translate(${width / 2}, ${35})')
         .text("Year")
     yAxisGroup = scatter.append("g")
-        .atttr("class", "yAxis")
-        .attr("transform", `translate(${margin.right}, ${0})`)
+        .attr("class", "yAxis")
         .call(yAxis_scatter)
     //ALL INFO IS IN state.Bargraph_2info
-    console.log(state.scatter_plot_wounded)
-    console.log(state.scatter_plot_kills)
     const lineGen = d3.line()
         .x(d=> xScale_scatter(d.iyear))
         .y(d => yScale_scatter(state.scatter_plot_kills))
