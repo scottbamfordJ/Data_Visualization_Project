@@ -259,11 +259,11 @@ function draw_horizontal(){
             storage_scatter = state.Bargraph_2info
             // Pulled this out of Scatter_plot_kills for i year ( d => new Date(+d.iyear, 0 ,1))
             state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d => d.iyear)
-            state.scatter_plot_kills.keys = Array.from(state.scatter_plot_kills.keys())
+            state.scatter_plot_kills.key = Array.from(state.scatter_plot_kills.keys())
             state.scatter_plot_kills.value = Array.from(state.scatter_plot_kills.values())
             state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => new Date(+d.iyear, 0 ,1))
             state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
-            state.scatter_plot_wounded.keys = Array.from(state.scatter_plot_wounded.keys())
+            state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
             // state.scatter_plot_wounded.Number = Array.from(state.scatter_plot_wounded.values())
             // state.scatter_plot_kills.Number = Array.from(state.scaatter_plot_kills.values())
 
@@ -296,6 +296,7 @@ function console_area(){
     console.log(state.scatter_plot_kills.value)
     console.log(state.scatter_plot_kills.keys)
     console.log(state.scatter_plot_kills.values())
+    draw_scatter()
 }
 
 
@@ -308,10 +309,10 @@ function draw_scatter() {
     test_storage = state.scatter_plot_kills
     console.log(test_storage)
     var parse = d3.timeParse("%Y")
-
+    
     xScale = d3.scaleLinear()
     // Using the 0, as the starting point, and having to duble subtract margins ( Look a tbargraph.append("g" style.) )
-        .domain([0, d3.max(state.bargraph.Attacks_Done)])
+        .domain([0, d3.max(state.scatter_plot_kills.value)])
         .range([ 0, width_1 - margin_1 - margin_1])  
     console.log(xScale.domain())
     yAxis = d3.axisRight(yScale)
@@ -347,8 +348,8 @@ function draw_scatter() {
         .call(yAxis_scatter)
     //ALL INFO IS IN state.Bargraph_2info
     const lineGen = d3.line()
-        .x(d=> xScale_scatter(d.iyear))
-        .y(d => yScale_scatter(state.scatter_plot_kills))
+        .x(d=> xScale_scatter(state.scatter_plot_kills.value))
+        .y(d => yScale_scatter(state.scatter_plot_kills.key))
     scatter.selectAll(".trend")
         .data(state.scatter_plot_kills)
         .join("path")
