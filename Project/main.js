@@ -105,7 +105,7 @@ usSates.on("click", (ev, d) => {
     state.bargraph.Organizations = Array.from(state.bargraph.keys())
     console.log(state.bargraph.Organizations)
     console.log(state.bargraph.Attacks_Done)
-    draw_horizontal();
+    bargraph_init();
    
 })
 /* 
@@ -130,6 +130,125 @@ svg.on("mousemove", (ev) => {
 })
  draw(); // calls the draw function
 }
+// function bargraph_1_init() {
+
+//     const storage_Graph2 = state.click_info
+//     yScale = d3.scaleBand ()
+//     //Order the data
+//     //Make bar pop out 
+//         .domain(state.bargraph.Organizations)
+//         .range([ height_1 - margin_1, margin_1])
+//         .padding(0.2)
+//     xScale = d3.scaleLinear()
+//         // Using the 0, as the starting point, and having to duble subtract margins ( Look a tbargraph.append("g" style.) )
+//         .domain([0, d3.max(state.bargraph.Attacks_Done)])
+//         .range([ 0, width_1 - margin_1 - margin_1])  
+//     yAxis = d3.axisRight(yScale)
+//         .scale(yScale)
+//     xAxis = d3.axisBottom(xScale)
+//         .scale(xScale)
+//     const bargraph = d3.select("#bargraph")
+//         .append("svg")
+//         .attr("width", width_1)
+//         .attr("height", height_1) 
+//     bargraph_1 = bargraph.selectAll(".bar")
+//         .data(state.bargraph)
+//         .enter().append("rect")
+//         .join()
+//         .attr("class", "bar")
+//         // .on("mousemove", organization_name)
+//         .attr("y", d => {
+//           return yScale(d[0])
+//         } )
+//         // .attr("x",  d => yScale(d[1]))
+//         .attr("x",  margin_1)
+//         // .attr("width", d =>  width_1 - margin_1 - xScale(d[1]))
+//         .attr("width", d => xScale(d[1]))
+//         .attr("height", yScale.bandwidth)
+//         .attr("fill", "lightblue")
+
+//         /* on click function for the output */
+//         // State creation use state_click info - > refer to above. 
+//     bargraph.append('g')
+//         .call( xAxis )
+//         .attr('class', 'x-axis')
+//         .style("transform", `translate(${margin_1}px,${height_1 - margin_1}px)`)
+//         // .attr("dx", "2em")
+    
+//     bargraph.append('g')
+//         .call(yAxis)
+//         .attr('class', 'y-axis')
+//         .style("transform", `translate(${margin_1}px,0px)`)   
+//     xAxisGroup = svg.append("g")
+//         .attr("class", 'xAxis')
+//         .attr("transform", `translate(${0}, ${height - 20})`) // move to the bottom
+//         .call(xAxis)
+    
+//     yAxisGroup = svg.append("g")
+//         .attr("class", 'yAxis')
+//         .attr("transform", `translate(${20}, ${0})`) // align with left margin
+//         .call(yAxis)
+        
+//     draw_bargraph_1()
+
+// }
+// function draw_bargraph_1(){
+//     let prevXScale = xScale.copy();
+//     let prevYScale = yScale.copy();
+
+//     xScale = xScale.domain([0, d3.max(state.bargraph.Attacks_Done)])
+//     xAxisGroup 
+//         .transition()
+//         .duration(1000)
+//         .call(xAxis.scale(xScale))
+//     yScale = yScale.domain(state.bargraph.Organizations)
+//     yAxisGroup  
+//         .transition()
+//         .duration(1000)
+//         .call(yAxis.scale(yScale))
+//     const bars = bargraph.append("rect")
+//         .data(state.bargraph)
+//         .join(
+//             enter => enter.append("rect")
+//                 .attr("y", d => {
+//                     return yScale(d[0])
+//                 } )
+//                 .attr("x",  margin_1)
+//                 .attr("width", d => xScale(d[1]))
+//                 .attr("height", yScale.bandwidth)
+//                 .attr("fill", "lightblue")
+//                 .attr("class", "bar")
+//                 .call(sel => sel.transition().duration(1000)
+//                     .attr("y", d => {
+//                         return yScale(d[0])
+//                     } )
+//                     .attr("x",  margin_1)
+//                     .attr("width", d => xScale(d[1]))
+//                     .attr("height", yScale.bandwidth)
+//                 ),
+//             update => update.call(sel => sel.transition()
+//                 .duration(1000)
+//                 .attr("y", d => {
+//                     return yScale(d[0])
+//                 } )
+//                 .attr("x",  margin_1)
+//                 .attr("width", d => xScale(d[1]))
+//                 .attr("height", yScale.bandwidth)
+//             ),
+//             exit => exit.call(exit => exit.transition()
+//                         .duration(1000)
+//                         .attr("y", d => {
+//                             return yScale(d[0])
+//                         } )
+//                         .attr("x",  margin_1)
+//                         .attr("width", d => xScale(d[1]))
+//                         .attr("height", yScale.bandwidth)
+//                         .style("opacity", 0)
+//                         .remove()),
+            
+//             )
+// }
+
 
 /**
 * DRAW FUNCTION
@@ -145,151 +264,67 @@ function draw() {
           )
         
 }   
-function draw2() {
-    /* Making Hover Box Stuff */
 
-    hover_bargraph = d3.select("#hover-bargraph")
-
-    /* Making Scales and Axis */
-
-    xScale = d3.scaleBand ()
-        .domain(state.bargraph.Organizations)
-        .range([margin_1, width_1 - margin_1])
-        .padding(0.2)
-
-    yScale = d3.scaleLinear()
-        .domain([0, d3.max(state.bargraph.Attacks_Done)])
-        .range([height_1 - margin_1, margin_1])  
-
-    xAxis = d3.axisBottom(xScale)
-      .scale(xScale)
-    yAxis = d3.axisRight(yScale)
-      .scale(yScale)
-    const bargraph = d3.select("#bargraph")
-        .append("svg")
-        .attr("width", width_1)
-        .attr("height", height_1) 
-    bargraph_1 = bargraph.selectAll(".bar")
-        .data(state.bargraph)
-        .enter().append("rect")
-        .attr("class", "bar")
-        // .on("mousemove", organization_name)
-        .attr("x", d => {
-          return xScale(d[0])
-        } )
-        .attr("y",  d => yScale(d[1]))
-        .attr("width", xScale.bandwidth())
-        .attr("height", d =>  height_1 - margin_1 - yScale(d[1]))
-        .attr("fill", "lightblue")
-    bargraph.append('g')
-        .call( xAxis )
-        .attr('class', 'x-axis')
-        .style("transform", `translate(0px,${height_1 - margin_1}px)`)
-        // .attr("dx", "2em")
-    
-    bargraph.append('g')
-        .call(yAxis)
-        .attr('class', 'y-axis')
-        .style("transform", `translate(${margin_1}px,0px)`)
-    /* Making Hover For Name of groups? 
-    
-            STILL WORKING ON IT!
-    */
-
-
-    // function organization_name (d,i) {
-    //     console.log(state.bargraph.Organizations[i])
-    // }
-    // bargraph_1.on("mousemove", (ev, d) => {
-    //     state.bargraph.hover_bargraph = state.bargraph.Organizations
-    //     state.bargraph.hover_attacks = state.bargraph.Attacks_Done
-    // })
-    
-    /* needs an Update clauser to prevent mulitple's from being used */
-}
-// function get_info(e, d){}
-function draw_horizontal(){
+function bargraph_init(){
     const storage_Graph2 = state.click_info
-    hover_bargraph = d3.select("#hover-bargraph")
-
-    /* Making Scales and Axis */
-
     yScale = d3.scaleBand ()
-    //Order the data
-    //Make bar pop out 
         .domain(state.bargraph.Organizations)
         .range([ height_1 - margin_1, margin_1])
         .padding(0.2)
-
     xScale = d3.scaleLinear()
-    // Using the 0, as the starting point, and having to duble subtract margins ( Look a tbargraph.append("g" style.) )
         .domain([0, d3.max(state.bargraph.Attacks_Done)])
         .range([ 0, width_1 - margin_1 - margin_1])  
-    console.log(xScale.domain())
     yAxis = d3.axisRight(yScale)
-      .scale(yScale)
+        .scale(yScale)
     xAxis = d3.axisBottom(xScale)
-      .scale(xScale)
+        .scale(xScale)
     const bargraph = d3.select("#bargraph")
         .append("svg")
         .attr("width", width_1)
         .attr("height", height_1) 
+
     bargraph_1 = bargraph.selectAll(".bar")
         .data(state.bargraph)
-        .enter().append("rect")
-        .attr("class", "bar")
-        // .on("mousemove", organization_name)
-        .attr("y", d => {
-          return yScale(d[0])
-        } )
-        // .attr("x",  d => yScale(d[1]))
-        .attr("x",  margin_1)
-        // .attr("width", d =>  width_1 - margin_1 - xScale(d[1]))
-        .attr("width", d => xScale(d[1]))
-        .attr("height", yScale.bandwidth)
-        .attr("fill", "lightblue")
-
-        /* on click function for the output */
-        // State creation use state_click info - > refer to above. 
-        .on("click", (e, d) => {
-            state.Bargraph_2Seleceted = d[0]
-            state.Bargraph_2info = storage_Graph2.filter(function(d){
-                return d.gname == state.Bargraph_2Seleceted
-                });
-            storage_scatter = state.Bargraph_2info
-            // Pulled this out of Scatter_plot_kills for i year ( d => new Date(+d.iyear, 0 ,1))
-            state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d => d.iyear)
-            state.scatter_plot_kills.key = Array.from(state.scatter_plot_kills.keys())
-            state.scatter_plot_kills.value = Array.from(state.scatter_plot_kills.values())
-            state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => new Date(+d.iyear, 0 ,1))
-            state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
-            state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
-            // state.scatter_plot_wounded.Number = Array.from(state.scatter_plot_wounded.values())
-            // state.scatter_plot_kills.Number = Array.from(state.scaatter_plot_kills.values())
-
-            // console.log(storage_scatter)
-            // This is where Organization Specific Information is stored. (state.Bargraph_2info)
-            console_area()
-            // state.Bargraph_2 = d3.rollup(state.Bargraph_2.info, v => v.length, d => d.gname)
-            // state.Bargraph_2.Attacks_Done = Array.from(state.Bargraph_2.info.values())
-            // state..Bargraph_2.Organizations = Array.from(state.Bargraph_2.info.keys())
-        })
-        //state.click_state id's the state of the group selected
-        //d is the actual organization name. 
+        .join(
+            enter => enter.append("rect")
+            .attr("class", "bar")
+            .attr("y", d => {
+              return yScale(d[0])
+            } )
+            .attr("x",  margin_1)
+            .attr("width", d => xScale(d[1]))
+            .attr("height", yScale.bandwidth)
+            .attr("fill", "lightblue")
+            .on("click", (e, d) => {
+                state.Bargraph_2Seleceted = d[0]
+                state.Bargraph_2info = storage_Graph2.filter(function(d){
+                    return d.gname == state.Bargraph_2Seleceted
+                    });
+                storage_scatter = state.Bargraph_2info
+                state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d => d.iyear)
+                state.scatter_plot_kills.key = Array.from(state.scatter_plot_kills.keys())
+                state.scatter_plot_kills.value = Array.from(state.scatter_plot_kills.values())
+                state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => new Date(+d.iyear, 0 ,1))
+                state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
+                state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
+                console_area()})
+        
+/* I'm Trying to make the UPdate and Exit HERE !!! */
+            )
     bargraph.append('g')
         .call( xAxis )
         .attr('class', 'x-axis')
         .style("transform", `translate(${margin_1}px,${height_1 - margin_1}px)`)
-        // .attr("dx", "2em")
     
     bargraph.append('g')
         .call(yAxis)
         .attr('class', 'y-axis')
-        .style("transform", `translate(${margin_1}px,0px)`)
-
-
-
+        .style("transform", `translate(${margin_1}px,0px)`)  
+        
+            
+    
 }
+
 
 function console_area(){ 
     console.log(state.scatter_plot_kills)
