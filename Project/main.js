@@ -146,7 +146,8 @@ function draw() {
 }   
 
 function bargraph_init(){
-    
+    console.log(state.Organizations)
+    // May need to pull this into the draw_bargraph since they're different with each click. 
     yScale = d3.scaleBand ()
         .domain(state.bargraph.Organizations)
         .range([ height_1 - margin_1, margin_1])
@@ -162,22 +163,19 @@ function bargraph_init(){
 }
 
 function draw_bargraph() {
+    var parse = d3.timeParse("%Y")
+    // I think That as its said what needs to change is the full SVG not just the bar's, I'm not sure exactly how I will be able to updated for the full SVG
+    // As well as I may need to pull the X + Y Scales into this draw since they do change based upon what is clicked. 
     const storage_Graph2 = state.click_info
     const bargraph = d3.selectAll("#bargraph")
         .append("svg")
         .attr("width", width_1)
         .attr("height", height_1)
-        // .data(state.bargraph)
-        // .join(
-        //     enter => bargraph.append(".bar"),
-        //     update => update.call(sel => sel.transition()),
-        //     exit => exit.call(exit => transition()
-        //         .remove("#bargraph")),
-        // )
 
     bargraph.selectAll(".bar")
         .data(state.bargraph)
         .join(
+            /* What the Data Will Start With*/ 
             enter => enter.append("rect")
                 .attr("class", "bar")
                 .attr("y", d => {
@@ -193,13 +191,14 @@ function draw_bargraph() {
                         return d.gname == state.Bargraph_2Seleceted
                         });
                     storage_scatter = state.Bargraph_2info
-                    state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d => d.iyear)
+                    state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d => parse(d.iyear))
                     state.scatter_plot_kills.key = Array.from(state.scatter_plot_kills.keys())
                     state.scatter_plot_kills.value = Array.from(state.scatter_plot_kills.values())
-                    state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => new Date(+d.iyear, 0 ,1))
+                    state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => parse(d.iyear))
                     state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
                     state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
                     console_area()}),
+            /* When The data changes How It will update*/
             update => update.call (sel => sel.transition()
                     .duration(1000)
                     .attr("y", d => {
@@ -215,14 +214,16 @@ function draw_bargraph() {
                             return d.gname == state.Bargraph_2Seleceted
                             });
                         storage_scatter = state.Bargraph_2info
-                        state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d => d.iyear)
+                        state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d =>d.iyear)
                         state.scatter_plot_kills.key = Array.from(state.scatter_plot_kills.keys())
                         state.scatter_plot_kills.value = Array.from(state.scatter_plot_kills.values())
-                        state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => new Date(+d.iyear, 0 ,1))
+                        // state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => new Date(+d.iyear))
+                        state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => d.iyear)
                         state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
                         state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
                         console_area()})
                         ),
+            /* When Data Is Updating What will be removed */ 
             exit => exit.call(exit => exit.transition()
                 .duration(100)
                 .attr("y", d => {
@@ -251,10 +252,10 @@ function draw_bargraph() {
 
 
 function console_area(){ 
-    console.log(state.scatter_plot_kills)
-    console.log(state.scatter_plot_kills.value)
-    console.log(state.scatter_plot_kills.keys)
-    console.log(state.scatter_plot_kills.values())
+    // console.log(state.scatter_plot_kills)
+    // console.log(state.scatter_plot_kills.value)
+    // console.log(state.scatter_plot_kills.keys)
+    // console.log(state.scatter_plot_kills.values())
     draw_scatter()
 }
 
@@ -265,52 +266,134 @@ function draw_scatter() {
     ///https://stackoverflow.com/questions/24855630/d3-skip-null-values-in-line-graph-with-several-lines
     ///https://observablehq.com/@d3/line-with-missing-data
 
-    test_storage = state.scatter_plot_kills
-    console.log(test_storage)
+    //If a map is missing a value (such as if the map has 1970 - 1975), if i refer to 1976, what will happen ? 
+    // I have two options -
+        // Option 1: Change the graph to instead fit based upon size of domain (so the years)
+            // Layer the wounded and nkills ontop of eachother. 
+        // Option 2: Keep Years static, figure out a way to have the values map correctly. 
+            // Layer the wounded and nkills ontop of eachother. 
+            //
+    test_storage_kills = state.scatter_plot_kills
+    test_storage_wounded = state.scatter_plot_wounded
+    console.log(test_storage_kills)
+    console.log(test_storage_wounded)
+    var year_range = d3.range(1970, 2019, 1)
+    console.log(year_range)
+    for (x in year_range){
+        results = (test_storage_kills.has(String(year_range[x])))
+        if (results == "false"){
+            console.log(year_range[x])
+        }
+        // if (results === FALSE){
+        //     console.log(year_range[x])
+        // }
+
+    }
+
+
     var parse = d3.timeParse("%Y")
-    
-
-
-    // console.log(storage_scatter)
-    // console.log(state.scatter_plot_kills )
-    // console.log(state.scatter_plot_wounded)
-    xScale_scatter = d3.scaleTime()
-        .domain([parse(1970), parse(2018)])
+    xScale = d3.scaleTime()
+        .domain(d3.extent(test_storage_kills, d => d.keys))
         .range([margin_1, width_1 - margin_1])
-    yScale_scatter = d3.scaleLinear()
-        .domain(d3.extent(state.scatter_plot_kills, d=> d.value))
-        .range([height_1 - margin_1, margin_1])
+    yScale = d3.scaleLinear()
+        .domain(d3.extent(test_storage_kills, d => d.values))
+        .range([margin_1 , width_1 - margin_1])
 
-    const xAxis_scatter = d3.axisBottom(xScale_scatter)
-        .ticks(30)
+    const xAxis_scatter = d3.axisBottom(xScale)
 
-    const yAxis_scatter = d3.axisLeft(yScale_scatter)
+    const yAxis_scatter = d3.axisLeft(yScale)
 
-    const bargraph = d3.select("#scatter-plot")
+
+    svg = d3.select("#scatter-plot")
         .append("svg")
         .attr("width", width_1)
-        .attr("height", height_1) 
+        .attr("height", height_1)
 
-    bargraph_1 = bargraph.selectAll(".bar")
-        .data(state.scatter_plot_kills)
-        .join(
-            enter => enter.append("rect")
-            .attr("class", "bar")
-            .attr("y", yScale_scatter())
-            .attr("x",  margin_1)
-            .attr("width", d => xScale_scatter(d.keys))
-            .attr("height", d => yScale_scatter(d.values))
-            .attr("fill", "lightblue")
-        )
-    bargraph.append('g')
-        .call( xAxis_scatter )
-        .attr('class', 'x-axis')
-        .style("transform", `translate(${0}px,${width_1 - margin_1}px)`)
-    
-    bargraph.append('g')
+    xAxis_Group = svg.append("g")
+        .attr("class", 'xAxis')
+        // .attr("transform", 'translate(${0}, ${height_1 - margin_1})')
+        .call(xAxis_scatter)
+    yAxis_Group = svg.append("g")
+        .attr("class", "yAxis")
+        // .attr("transform", "translate(${margin_1}, ${width_1 - margin_1})")
         .call(yAxis_scatter)
-        .attr('class', 'y-axis')
-        .style("transform", `translate(${margin_1}px,0px)`)  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // // console.log(test_storage)
+    // var parse = d3.timeParse("%Y")
+    
+
+
+    // // console.log(storage_scatter)
+    // // console.log(state.scatter_plot_kills )
+    // // console.log(state.scatter_plot_wounded)
+    // xScale_scatter = d3.scaleTime()
+    //     .domain([parse(1970), parse(2018)])
+    //     .range([margin_1, width_1 - margin_1])
+    // // xScale_scatter = d3.scaleTime()
+    // //     .domain(d3.extent(state.scatter_plot_kills.key))
+    // //     .range([margin_1 , width_1 - margin_1])
+    // yScale_scatter = d3.scaleLinear()
+    //     .domain(d3.extent(state.scatter_plot_kills, d=> d.value))
+    //     .range([height_1 - margin_1, margin_1])
+    
+    // const xAxis_scatter = d3.axisBottom(xScale_scatter)
+    //     .ticks(30)
+
+    // const yAxis_scatter = d3.axisLeft(yScale_scatter)
+    // // console.log(state.scatter_plot_kills.keys === 1970)
+    // const bargraph = d3.select("#scatter-plot")
+    //     .append("svg")
+    //     .attr("width", width_1)
+    //     .attr("height", height_1) 
+
+    // bargraph_1 = bargraph.selectAll(".bar")
+    //     .data(state.scatter_plot_kills)
+    //     .join("rect")
+    //     .attr("class", "bar")
+    //     .attr("x",  d => {
+    //         return xScale_scatter(d[0])
+    //     })
+    //     .attr("y",  margin_1)
+    //     .attr("width", d => xScale_scatter(d.keys))
+    //     .attr("height", d => yScale_scatter(d.values))
+    //     .attr("fill", "lightblue")
+    // bargraph.append('g')
+    //     .call( xAxis_scatter )
+    //     .attr('class', 'x-axis')
+    //     .style("transform", `translate(${0}px,${width_1 - margin_1}px)`)
+    
+    // bargraph.append('g')
+    //     .call(yAxis_scatter)
+    //     .attr('class', 'y-axis')
+    //     .style("transform", `translate(${margin_1}px,0px)`)  
 
 
 
