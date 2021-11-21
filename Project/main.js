@@ -146,7 +146,7 @@ function draw() {
 }   
 
 function bargraph_init(){
-    const storage_Graph2 = state.click_info
+    
     yScale = d3.scaleBand ()
         .domain(state.bargraph.Organizations)
         .range([ height_1 - margin_1, margin_1])
@@ -158,38 +158,82 @@ function bargraph_init(){
         .scale(yScale)
     xAxis = d3.axisBottom(xScale)
         .scale(xScale)
-    const bargraph = d3.select("#bargraph")
+    draw_bargraph()
+}
+
+function draw_bargraph() {
+    const storage_Graph2 = state.click_info
+    const bargraph = d3.selectAll("#bargraph")
         .append("svg")
         .attr("width", width_1)
-        .attr("height", height_1) 
+        .attr("height", height_1)
+        // .data(state.bargraph)
+        // .join(
+        //     enter => bargraph.append(".bar"),
+        //     update => update.call(sel => sel.transition()),
+        //     exit => exit.call(exit => transition()
+        //         .remove("#bargraph")),
+        // )
 
-    bargraph_1 = bargraph.selectAll(".bar")
+    bargraph.selectAll(".bar")
         .data(state.bargraph)
         .join(
             enter => enter.append("rect")
-            .attr("class", "bar")
-            .attr("y", d => {
-              return yScale(d[0])
-            } )
-            .attr("x",  margin_1)
-            .attr("width", d => xScale(d[1]))
-            .attr("height", yScale.bandwidth)
-            .attr("fill", "lightblue")
-            .on("click", (e, d) => {
-                state.Bargraph_2Seleceted = d[0]
-                state.Bargraph_2info = storage_Graph2.filter(function(d){
-                    return d.gname == state.Bargraph_2Seleceted
-                    });
-                storage_scatter = state.Bargraph_2info
-                state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d => d.iyear)
-                state.scatter_plot_kills.key = Array.from(state.scatter_plot_kills.keys())
-                state.scatter_plot_kills.value = Array.from(state.scatter_plot_kills.values())
-                state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => new Date(+d.iyear, 0 ,1))
-                state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
-                state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
-                console_area()})
-        
-/* I'm Trying to make the UPdate and Exit HERE !!! */
+                .attr("class", "bar")
+                .attr("y", d => {
+                return yScale(d[0])
+                } )
+                .attr("x",  margin_1)
+                .attr("width", d => xScale(d[1]))
+                .attr("height", yScale.bandwidth)
+                .attr("fill", "lightblue")
+                .on("click", (e, d) => {
+                    state.Bargraph_2Seleceted = d[0]
+                    state.Bargraph_2info = storage_Graph2.filter(function(d){
+                        return d.gname == state.Bargraph_2Seleceted
+                        });
+                    storage_scatter = state.Bargraph_2info
+                    state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d => d.iyear)
+                    state.scatter_plot_kills.key = Array.from(state.scatter_plot_kills.keys())
+                    state.scatter_plot_kills.value = Array.from(state.scatter_plot_kills.values())
+                    state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => new Date(+d.iyear, 0 ,1))
+                    state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
+                    state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
+                    console_area()}),
+            update => update.call (sel => sel.transition()
+                    .duration(1000)
+                    .attr("y", d => {
+                        return yScale(d[0])
+                    } )
+                    .attr("x",  margin_1)
+                    .attr("width", d => xScale(d[1]))
+                    .attr("height", yScale.bandwidth)
+                    .attr("fill", "lightblue")
+                    .on("click", (e, d) => {
+                        state.Bargraph_2Seleceted = d[0]
+                        state.Bargraph_2info = storage_Graph2.filter(function(d){
+                            return d.gname == state.Bargraph_2Seleceted
+                            });
+                        storage_scatter = state.Bargraph_2info
+                        state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d => d.iyear)
+                        state.scatter_plot_kills.key = Array.from(state.scatter_plot_kills.keys())
+                        state.scatter_plot_kills.value = Array.from(state.scatter_plot_kills.values())
+                        state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => new Date(+d.iyear, 0 ,1))
+                        state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
+                        state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
+                        console_area()})
+                        ),
+            exit => exit.call(exit => exit.transition()
+                .duration(100)
+                .attr("y", d => {
+                    return yScale(d[0])
+                } )
+                .attr("x",  margin_1)
+                .attr("width", d => xScale(d[1]))
+                .attr("height", yScale.bandwidth)
+                .attr("fill", "lightblue")
+                .remove()
+            ),
             )
     bargraph.append('g')
         .call( xAxis )
