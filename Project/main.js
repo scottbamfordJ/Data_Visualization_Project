@@ -191,13 +191,13 @@ function draw_bargraph() {
                         return d.gname == state.Bargraph_2Seleceted
                         });
                     storage_scatter = state.Bargraph_2info
-                    state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d => parse(d.iyear))
+                    state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d => d.iyear)
                     state.scatter_plot_kills.key = Array.from(state.scatter_plot_kills.keys())
                     state.scatter_plot_kills.value = Array.from(state.scatter_plot_kills.values())
-                    state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => parse(d.iyear))
+                    state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => d.iyear)
                     state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
                     state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
-                    console_area()}),
+                    scatter_init()}),
             /* When The data changes How It will update*/
             update => update.call (sel => sel.transition()
                     .duration(1000)
@@ -221,7 +221,7 @@ function draw_bargraph() {
                         state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => d.iyear)
                         state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
                         state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
-                        console_area()})
+                        scatter_init()})
                         ),
             /* When Data Is Updating What will be removed */ 
             exit => exit.call(exit => exit.transition()
@@ -251,11 +251,14 @@ function draw_bargraph() {
 }
 
 
-function console_area(){ 
+function scatter_init(){ 
     // console.log(state.scatter_plot_kills)
     // console.log(state.scatter_plot_kills.value)
-    // console.log(state.scatter_plot_kills.keys)
-    // console.log(state.scatter_plot_kills.values())
+    console.log(state.scatter_plot_kills.key)
+    console.log(state.scatter_plot_kills.value)
+
+    // xScale_Scatter = d3.scaleBand()
+    //     .domain(state.scatter_plot_wounded.value)
     draw_scatter()
 }
 
@@ -275,49 +278,89 @@ function draw_scatter() {
             //
     test_storage_kills = state.scatter_plot_kills
     test_storage_wounded = state.scatter_plot_wounded
-    console.log(test_storage_kills)
-    console.log(test_storage_wounded)
-    var year_range = d3.range(1970, 2019, 1)
-    console.log(year_range)
-    for (x in year_range){
-        results = (test_storage_kills.has(String(year_range[x])))
-        if (results == "false"){
-            console.log(year_range[x])
-        }
-        // if (results === FALSE){
-        //     console.log(year_range[x])
-        // }
-
-    }
+    // console.log(test_storage_kills)
+    // console.log(test_storage_wounded)
 
 
-    var parse = d3.timeParse("%Y")
-    xScale = d3.scaleTime()
-        .domain(d3.extent(test_storage_kills, d => d.keys))
+
+
+
+
+    // yScale = d3.scaleBand ()
+    //     .domain(state.scatter_plot_kills.key)
+    //     .range([ height_1 - margin_1, margin_1])
+    //     .padding(0.2)
+    // xScale = d3.scaleLinear()
+    //     .domain([0, d3.max(test_storage_kills.value)])
+    //     .range([ 0, width_1 - margin_1 - margin_1])  
+    // yAxis = d3.axisRight(yScale)
+    //     .scale(yScale)
+    // xAxis = d3.axisBottom(xScale)
+    //     .scale(xScale)
+
+    // scatter_plot = d3.select("#scatter-plot")
+    //     .append("svg")
+    //     .attr("width", width_1)
+    //     .attr("height", height_1)
+    
+    // plotting = scatter_plot.selectAll(".bar")
+    //     .data(state.scatter_plot_kills)
+    //     .enter().append("rect")
+    //     .join()
+    //     .attr("class", "bar")
+    //     .attr("x", d => {
+    //         return xScale(d[0])
+    //     })
+    //     .attr("y", margin_1)
+    //     .attr("width", xScale.bandwidth())
+    //     .attr("height", d => yScale(state.scatter_plot_kills.value))
+
+    
+
+
+
+
+
+
+    xScale_scatter = d3.scaleBand()
+        .domain(state.scatter_plot_kills.key)
         .range([margin_1, width_1 - margin_1])
-    yScale = d3.scaleLinear()
+        .padding(0.2)
+    yScale_scatter = d3.scaleLinear()
         .domain(d3.extent(test_storage_kills, d => d.values))
         .range([margin_1 , width_1 - margin_1])
 
-    const xAxis_scatter = d3.axisBottom(xScale)
+    const xAxis_scatter = d3.axisBottom(xScale_scatter)
+        .scale(xScale_scatter)
 
-    const yAxis_scatter = d3.axisLeft(yScale)
-
+    const yAxis_scatter = d3.axisLeft(yScale_scatter)
+        .scale(yScale_scatter)
 
     svg = d3.select("#scatter-plot")
         .append("svg")
         .attr("width", width_1)
         .attr("height", height_1)
 
-    xAxis_Group = svg.append("g")
-        .attr("class", 'xAxis')
-        // .attr("transform", 'translate(${0}, ${height_1 - margin_1})')
-        .call(xAxis_scatter)
-    yAxis_Group = svg.append("g")
-        .attr("class", "yAxis")
-        // .attr("transform", "translate(${margin_1}, ${width_1 - margin_1})")
-        .call(yAxis_scatter)
+    svg.selectAll("rect")
+        .data(state.scatter_plot_kills)
+        .join("rect")
+        .attr("x", d => {
+            return xScale_scatter(d[0])
+        })
+        .attr("y", height_1 - margin_1)
+        .attr("width", xScale_scatter.bandwidth)
+        .attr("height", d=> height_1 - yScale_scatter(d[1]))
 
+    
+    svg.append('g')
+        .call( xAxis_scatter )
+        .attr('class', 'x-axis')
+        .style("transform", `translate(${0}px,${height_1 - margin_1}px)`)
+    
+    svg.append('g')
+        .call(yAxis_scatter)
+        .attr('class', 'y-axis')
+        .style("transform", `translate(${margin_1}px,0px)`)  
 
 
 
