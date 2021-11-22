@@ -15,10 +15,13 @@ let svg,
 let xScale;
 let yScale;
 let xAxis;
+let xAxisg;
+let yAxisg;
 let xAxisGroup;
 let yAxis;
 let yAxisGroup;
-let colorScale
+let colorScale;
+let bargraph;
 /**
 * APPLICATION STATE
 * */
@@ -30,9 +33,7 @@ let state = {
     bargraph: [],
     bargraph_2: []
     };
-let bargraph = {
-    
-}
+
 /**
 * LOAD DATA
 * Using a Promise.all([]), we can load more than one dataset at a time
@@ -46,7 +47,9 @@ Promise.all([
  state.terrorist_state_data = terrorist_state_data
  state.full_data = full_data
 console.log("state: ", state);
- init();
+
+init();
+bargraph_init();
 });
 
 /**
@@ -103,9 +106,9 @@ usSates.on("click", (ev, d) => {
     state.bargraph.Attacks_Done = Array.from(state.bargraph.values())
     console.log(state.bargraph.Attacks_Done)
     state.bargraph.Organizations = Array.from(state.bargraph.keys())
-    console.log(state.bargraph.Organizations)
-    console.log(state.bargraph.Attacks_Done)
-    bargraph_init();
+    // console.log(state.bargraph.Organizations)
+    // console.log(state.bargraph.Attacks_Done)
+    draw_bargraph();
    
 })
 
@@ -146,20 +149,44 @@ function draw() {
 }   
 
 function bargraph_init(){
-    console.log(state.Organizations)
+    console.log(state.bargraph.Organizations)
+    console.log(yScale)
     // May need to pull this into the draw_bargraph since they're different with each click. 
-    yScale = d3.scaleBand ()
-        .domain(state.bargraph.Organizations)
+    yScale = d3.scaleBand()
         .range([ height_1 - margin_1, margin_1])
-        .padding(0.2)
     xScale = d3.scaleLinear()
-        .domain([0, d3.max(state.bargraph.Attacks_Done)])
         .range([ 0, width_1 - margin_1 - margin_1])  
     yAxis = d3.axisRight(yScale)
         .scale(yScale)
     xAxis = d3.axisBottom(xScale)
         .scale(xScale)
-    draw_bargraph()
+
+    bargraph = d3.selectAll("#bargraph")
+        .append("svg")
+        .attr("width", width_1)
+        .attr("height", height_1)
+    xAxisg = bargraph.append('g')
+        .attr('class', 'x-axis')
+        .style("transform", `translate(${margin_1}px,${height_1 - margin_1}px)`)
+    yAxisg = bargraph.append('g')
+        .attr('class', 'y-axis')
+        .style("transform", `translate(${margin_1}px,${width_1 - margin_1}px)`)
+    xAxisLabel = bargraph.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", 575 )
+        .attr("y", 840)
+    yAxisLabel = bargraph.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("y", 150)
+        .attr("x", -450)
+        .attr("dy", "0.75em")
+
+
+
+
+
 }
 
 function draw_bargraph() {
@@ -167,11 +194,11 @@ function draw_bargraph() {
     // I think That as its said what needs to change is the full SVG not just the bar's, I'm not sure exactly how I will be able to updated for the full SVG
     // As well as I may need to pull the X + Y Scales into this draw since they do change based upon what is clicked. 
     const storage_Graph2 = state.click_info
-    const bargraph = d3.selectAll("#bargraph")
-        .append("svg")
-        .attr("width", width_1)
-        .attr("height", height_1)
-
+    //Updated yScale xScale
+    yScale.domain(state.bargraph.Organizations).padding(0.2)
+    xScale.domain([0, d3.max(state.bargraph.Attacks_Done)])
+    console.log(yScale(state.bargraph.Organizations))
+    
     bargraph.selectAll(".bar")
         .data(state.bargraph)
         .join(
@@ -184,20 +211,7 @@ function draw_bargraph() {
                 .attr("x",  margin_1)
                 .attr("width", d => xScale(d[1]))
                 .attr("height", yScale.bandwidth)
-                .attr("fill", "lightblue")
-                .on("click", (e, d) => {
-                    state.Bargraph_2Seleceted = d[0]
-                    state.Bargraph_2info = storage_Graph2.filter(function(d){
-                        return d.gname == state.Bargraph_2Seleceted
-                        });
-                    storage_scatter = state.Bargraph_2info
-                    state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d => d.iyear)
-                    state.scatter_plot_kills.key = Array.from(state.scatter_plot_kills.keys())
-                    state.scatter_plot_kills.value = Array.from(state.scatter_plot_kills.values())
-                    state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => d.iyear)
-                    state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
-                    state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
-                    scatter_init()}),
+                .attr("fill", "lightblue"),
             /* When The data changes How It will update*/
             update => update.call (sel => sel.transition()
                     .duration(1000)
@@ -208,20 +222,7 @@ function draw_bargraph() {
                     .attr("width", d => xScale(d[1]))
                     .attr("height", yScale.bandwidth)
                     .attr("fill", "lightblue")
-                    .on("click", (e, d) => {
-                        state.Bargraph_2Seleceted = d[0]
-                        state.Bargraph_2info = storage_Graph2.filter(function(d){
-                            return d.gname == state.Bargraph_2Seleceted
-                            });
-                        storage_scatter = state.Bargraph_2info
-                        state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d =>d.iyear)
-                        state.scatter_plot_kills.key = Array.from(state.scatter_plot_kills.keys())
-                        state.scatter_plot_kills.value = Array.from(state.scatter_plot_kills.values())
-                        // state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => new Date(+d.iyear))
-                        state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => d.iyear)
-                        state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
-                        state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
-                        scatter_init()})
+
                         ),
             /* When Data Is Updating What will be removed */ 
             exit => exit.call(exit => exit.transition()
@@ -236,15 +237,34 @@ function draw_bargraph() {
                 .remove()
             ),
             )
-    bargraph.append('g')
-        .call( xAxis )
-        .attr('class', 'x-axis')
-        .style("transform", `translate(${margin_1}px,${height_1 - margin_1}px)`)
-    
-    bargraph.append('g')
-        .call(yAxis)
-        .attr('class', 'y-axis')
-        .style("transform", `translate(${margin_1}px,0px)`)  
+            .on("click", (e, d) => {
+                state.Bargraph_2Seleceted = d[0]
+                state.Bargraph_2info = storage_Graph2.filter(function(d){
+                    return d.gname == state.Bargraph_2Seleceted
+                    });
+                storage_scatter = state.Bargraph_2info
+                state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d =>d.iyear)
+                state.scatter_plot_kills.key = Array.from(state.scatter_plot_kills.keys())
+                state.scatter_plot_kills.value = Array.from(state.scatter_plot_kills.values())
+                // state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => new Date(+d.iyear))
+                state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => d.iyear)
+                state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
+                state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
+                scatter_init()})
+        xAxisg.call(xAxis)
+        yAxisg.call(yAxis)
+        xAxisLabel.text("Number Of Attacks")
+        yAxisLabel.text("Organization Name").attr("transform", "rotate(-90)")
+    // bargraph.append('g')
+    //     .call( xAxis )
+    //     .attr('class', 'x-axis')
+    //     .style("transform", `translate(${margin_1}px,${height_1 - margin_1}px)`)
+
+    // bargraph.append('g')
+    //     .call( yAxis )
+    //     .attr('class', 'x-axis')
+    //     .style("transform", `translate(${margin_1}px,${width_1 - margin_1}px)`)
+ 
         
             
     
@@ -349,7 +369,7 @@ function draw_scatter() {
         })
         .attr("y", height_1 - margin_1)
         .attr("width", xScale_scatter.bandwidth)
-        .attr("height", d=> height_1 - yScale_scatter(d[1]))
+        .attr("height", d => yScale_scatter(d.value))
 
     
     svg.append('g')
