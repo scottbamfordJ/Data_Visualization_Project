@@ -22,8 +22,8 @@ let yAxis;
 let yAxisGroup;
 let colorScale;
 let bargraph;
-let xScale_Scatter;
-let yScale_Scatter;
+let xScale_scatter;
+let yScale_scatter;
 let xAxis_scatter;
 let yAxis_scatter;
 let xAxis_2;
@@ -116,6 +116,7 @@ usSates.on("click", (ev, d) => {
     // console.log(state.bargraph.Organizations)
     // console.log(state.bargraph.Attacks_Done)
     draw_bargraph();
+    //Create New Function which removes the elements in the SVG;
    
 })
 
@@ -177,7 +178,7 @@ function bargraph_init(){
         .style("transform", `translate(${margin_1}px,${height_1 - margin_1}px)`)
     yAxisg = bargraph.append('g')
         .attr('class', 'y-axis')
-        .style("transform", `translate(${margin_1}px,${width_1 - margin_1}px)`)
+        .style("transform", `translate(${margin_1}px,${0}px)`)
     xAxisLabel = bargraph.append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
@@ -259,7 +260,7 @@ function draw_bargraph() {
                 state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
                 draw_scatter()})
         xAxisg.call(xAxis)
-        yAxisg.call(yAxis)
+        yAxisg.call(yAxis) // Raise Look It Up 
         xAxisLabel.text("Number Of Attacks")
         yAxisLabel.text("Organization Name").attr("transform", "rotate(-90)")
     // bargraph.append('g')
@@ -285,7 +286,7 @@ function scatter_init(){
         .range([margin_1, width_1 - margin_1])
         .padding(0.2)
     yScale_scatter = d3.scaleLinear()
-        .range([margin_1 , width_1 - margin_1])
+        .range([height_1 - margin_1, margin_1])
     xAxis_scatter = d3.axisBottom(xScale_scatter)
         .scale(xScale_scatter)
     yAxis_scatter = d3.axisLeft(yScale_scatter)
@@ -297,16 +298,17 @@ function scatter_init(){
         .attr("height", height_1)
     xAxis_2 = svg.append('g')
         .attr('class', 'x-axis')
-        .style("transform", `translate(${margin_1}px,${height_1 - margin_1}px)`)
+        .style("transform", `translate(${0}px,${height_1 - margin_1}px)`)
     yAxis_2 = svg.append('g')
         .attr('class', 'y-axis')
-        .style("transform", `translate(${margin_1}px,${width_1 - margin_1}px)`)
+        // .style("transform", `translate(${margin_1}px,${0}px)`)
 }
 
 
 
 function draw_scatter(){  
-
+    // Set Data To Null 
+    // Create a new Function Clear Scatter, Call when you select a state. 
     ///https://stackoverflow.com/questions/24855630/d3-skip-null-values-in-line-graph-with-several-lines
     ///https://observablehq.com/@d3/line-with-missing-data
 
@@ -320,17 +322,18 @@ function draw_scatter(){
     test_storage_kills = state.scatter_plot_kills
     test_storage_wounded = state.scatter_plot_wounded
     xScale_scatter.domain(state.scatter_plot_kills.key)
-    yScale_scatter.domain(d3.extent(test_storage_kills, d => d.value))
-
+    yScale_scatter.domain([ 0, d3.max(state.scatter_plot_kills.value)])
+    console.log(yScale_scatter(state.scatter_plot_kills.value))
+    console.log(state.scatter_plot_kills.value)
     svg.selectAll(".bar")
         .data(state.scatter_plot_kills)
         .join("rect")
         .attr("x", d => {
             return xScale_scatter(d[0])
         })
-        .attr("y", height_1- margin_1)
+        .attr("y", d =>  yScale_scatter(d[1]))
         .attr("width", xScale_scatter.bandwidth)
-        .attr("height", d => yScale_scatter(d.value))
+        .attr("height", d => height_1 - margin_1- yScale_scatter(d[1]))
     
 
     xAxis_2.call(xAxis_scatter)
@@ -351,8 +354,9 @@ function draw_scatter(){
 
 
 
-
-
+// CSS Grid 
+// MOUSE ENTER< MOUSE OVER < MOUSE EXIT
+// ENTER AND EXIT RECOMMENDED 
 
 
 
