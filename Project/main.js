@@ -22,6 +22,12 @@ let yAxis;
 let yAxisGroup;
 let colorScale;
 let bargraph;
+let xScale_Scatter;
+let yScale_Scatter;
+let xAxis_scatter;
+let yAxis_scatter;
+let xAxis_2;
+let yAxis_2;
 /**
 * APPLICATION STATE
 * */
@@ -50,6 +56,7 @@ console.log("state: ", state);
 
 init();
 bargraph_init();
+scatter_init();
 });
 
 /**
@@ -250,7 +257,7 @@ function draw_bargraph() {
                 state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => d.iyear)
                 state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
                 state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
-                scatter_init()})
+                draw_scatter()})
         xAxisg.call(xAxis)
         yAxisg.call(yAxis)
         xAxisLabel.text("Number Of Attacks")
@@ -274,17 +281,31 @@ function draw_bargraph() {
 function scatter_init(){ 
     // console.log(state.scatter_plot_kills)
     // console.log(state.scatter_plot_kills.value)
-    console.log(state.scatter_plot_kills.key)
-    console.log(state.scatter_plot_kills.value)
+    xScale_scatter = d3.scaleBand()
+        .range([margin_1, width_1 - margin_1])
+        .padding(0.2)
+    yScale_scatter = d3.scaleLinear()
+        .range([margin_1 , width_1 - margin_1])
+    xAxis_scatter = d3.axisBottom(xScale_scatter)
+        .scale(xScale_scatter)
+    yAxis_scatter = d3.axisLeft(yScale_scatter)
+        .scale(yScale_scatter)
 
-    // xScale_Scatter = d3.scaleBand()
-    //     .domain(state.scatter_plot_wounded.value)
-    draw_scatter()
+    svg = d3.select("#scatter-plot")
+        .append("svg")
+        .attr("width", width_1)
+        .attr("height", height_1)
+    xAxis_2 = svg.append('g')
+        .attr('class', 'x-axis')
+        .style("transform", `translate(${margin_1}px,${height_1 - margin_1}px)`)
+    yAxis_2 = svg.append('g')
+        .attr('class', 'y-axis')
+        .style("transform", `translate(${margin_1}px,${width_1 - margin_1}px)`)
 }
 
 
 
-function draw_scatter() {  
+function draw_scatter(){  
 
     ///https://stackoverflow.com/questions/24855630/d3-skip-null-values-in-line-graph-with-several-lines
     ///https://observablehq.com/@d3/line-with-missing-data
@@ -298,91 +319,22 @@ function draw_scatter() {
             //
     test_storage_kills = state.scatter_plot_kills
     test_storage_wounded = state.scatter_plot_wounded
-    // console.log(test_storage_kills)
-    // console.log(test_storage_wounded)
+    xScale_scatter.domain(state.scatter_plot_kills.key)
+    yScale_scatter.domain(d3.extent(test_storage_kills, d => d.value))
 
-
-
-
-
-
-    // yScale = d3.scaleBand ()
-    //     .domain(state.scatter_plot_kills.key)
-    //     .range([ height_1 - margin_1, margin_1])
-    //     .padding(0.2)
-    // xScale = d3.scaleLinear()
-    //     .domain([0, d3.max(test_storage_kills.value)])
-    //     .range([ 0, width_1 - margin_1 - margin_1])  
-    // yAxis = d3.axisRight(yScale)
-    //     .scale(yScale)
-    // xAxis = d3.axisBottom(xScale)
-    //     .scale(xScale)
-
-    // scatter_plot = d3.select("#scatter-plot")
-    //     .append("svg")
-    //     .attr("width", width_1)
-    //     .attr("height", height_1)
-    
-    // plotting = scatter_plot.selectAll(".bar")
-    //     .data(state.scatter_plot_kills)
-    //     .enter().append("rect")
-    //     .join()
-    //     .attr("class", "bar")
-    //     .attr("x", d => {
-    //         return xScale(d[0])
-    //     })
-    //     .attr("y", margin_1)
-    //     .attr("width", xScale.bandwidth())
-    //     .attr("height", d => yScale(state.scatter_plot_kills.value))
-
-    
-
-
-
-
-
-
-    xScale_scatter = d3.scaleBand()
-        .domain(state.scatter_plot_kills.key)
-        .range([margin_1, width_1 - margin_1])
-        .padding(0.2)
-    yScale_scatter = d3.scaleLinear()
-        .domain(d3.extent(test_storage_kills, d => d.values))
-        .range([margin_1 , width_1 - margin_1])
-
-    const xAxis_scatter = d3.axisBottom(xScale_scatter)
-        .scale(xScale_scatter)
-
-    const yAxis_scatter = d3.axisLeft(yScale_scatter)
-        .scale(yScale_scatter)
-
-    svg = d3.select("#scatter-plot")
-        .append("svg")
-        .attr("width", width_1)
-        .attr("height", height_1)
-
-    svg.selectAll("rect")
+    svg.selectAll(".bar")
         .data(state.scatter_plot_kills)
         .join("rect")
         .attr("x", d => {
             return xScale_scatter(d[0])
         })
-        .attr("y", height_1 - margin_1)
+        .attr("y", height_1- margin_1)
         .attr("width", xScale_scatter.bandwidth)
         .attr("height", d => yScale_scatter(d.value))
-
     
-    svg.append('g')
-        .call( xAxis_scatter )
-        .attr('class', 'x-axis')
-        .style("transform", `translate(${0}px,${height_1 - margin_1}px)`)
-    
-    svg.append('g')
-        .call(yAxis_scatter)
-        .attr('class', 'y-axis')
-        .style("transform", `translate(${margin_1}px,0px)`)  
 
-
+    xAxis_2.call(xAxis_scatter)
+    yAxis_2.call(yAxis_scatter)
 
 
 
