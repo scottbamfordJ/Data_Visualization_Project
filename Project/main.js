@@ -123,7 +123,7 @@ usSates.on("click", (ev, d) => {
     // console.log(state.bargraph.Organizations)
     // console.log(state.bargraph.Attacks_Done)
     draw_bargraph();
-    // Remove_svg();
+    Remove_svg();
     //Create New Function which removes the elements in the SVG;
    
 })
@@ -207,7 +207,7 @@ function bargraph_init(){
 }
 function Remove_svg(){
     nkills_plot.selectAll("rect").remove();
-    bargraph_wounded.selectAll("rect").remove();
+    nwounded_plot.selectAll("rect").remove();
 }
 function draw_bargraph() {
     var parse = d3.timeParse("%Y")
@@ -359,41 +359,42 @@ function draw_killed(){
                 .remove()
                 ),
         )
-    xAxis_2.call(xAxis_scatter)
-    yAxis_2.call(yAxis_scatter)
+        xAxis_2.call(xAxis_scatter)
+        yAxis_2.call(yAxis_scatter)
 }
-
-// CSS Grid 
-// MOUSE ENTER< MOUSE OVER < MOUSE EXIT
-// ENTER AND EXIT RECOMMENDED 
-function nwounded_bargraph_init(){
-    xScale_wounded  = d3.scaleBand()
+function nwounded_bargraph_init(){ 
+    // console.log(state.scatter_plot_kills)
+    // console.log(state.scatter_plot_kills.value)
+    xScale_wounded = d3.scaleBand()
         .range([margin_1, width_1 - margin_1])
         .padding(0.2)
-    yScale_wounded  = d3.scaleLinear()
+    yScale_wounded = d3.scaleLinear()
         .range([height_1 - margin_1, margin_1])
-    xAxis_wounded  = d3.axisBottom(xScale_wounded)
+    xAxis_wounded = d3.axisBottom(xScale_wounded)
         .scale(xScale_wounded)
     yAxis_wounded = d3.axisLeft(yScale_wounded)
         .scale(yScale_wounded)
 
-    bargraph_wounded = d3.select("#nwounded-plot")
+    nwounded_plot = d3.select("#nwounded-plot")
         .append("svg")
         .attr("width", width_1)
         .attr("height", height_1)
-    xAxis_wounded_label = bargraph_wounded.append('g')
+    xAxis_wounded_label = nwounded_plot.append('g')
         .attr('class', 'x-axis')
         .style("transform", `translate(${0}px,${height_1 - margin_1}px)`)
-    yAxis_wounded_label = bargraph_wounded.append('g')
+    yAxis_wounded_label = nwounded_plot.append('g')
         .attr('class', 'y-axis')
         .style("transform", `translate(${margin_1}px,${0}px)`)
 }
 
-function draw_wounded(){
+
+
+function draw_wounded(){  
+
     xScale_wounded.domain(state.scatter_plot_wounded.key)
     yScale_wounded.domain([ 0, d3.max(state.scatter_plot_wounded.value)])
-    bargraph_wounded.selectAll(".bar")
-        .data(state.scatter_plot_wounded)
+    nwounded_plot.selectAll(".bar")
+        .data(state.scatter_plot_kills)
         .join(
             enter => enter.append("rect")
                 .attr("class", "bar")
@@ -403,7 +404,7 @@ function draw_wounded(){
                 .attr("y", d =>  yScale_wounded(d[1]))
                 .attr("width", xScale_wounded.bandwidth)
                 .attr("height", d => height_1 - margin_1- yScale_wounded(d[1]))
-                .attr("fill", "yellow"),
+                .attr("fill", "red"),
             update => update.call(sel => sel.transition()
                 .duration(1000)
                 .attr("x", d => {
@@ -412,7 +413,7 @@ function draw_wounded(){
                 .attr("y", d =>  yScale_wounded(d[1]))
                 .attr("width", xScale_wounded.bandwidth)
                 .attr("height", d => height_1 - margin_1- yScale_wounded(d[1]))
-                .attr("fill", "yellow")
+                .attr("fill", "red")
                 ),
             exit => exit.call(exit=> exit.transition()
                 .duration(10)
@@ -422,10 +423,13 @@ function draw_wounded(){
                 .attr("y", d =>  yScale_wounded(d[1]))
                 .attr("width", xScale_wounded.bandwidth)
                 .attr("height", d => height_1 - margin_1- yScale_wounded(d[1]))
-                .attr("fill", "yellow")
+                .attr("fill", "red")
                 .remove()
                 ),
         )
-    xAxis_wounded_label.call(xScale_wounded)
-    yAxis_wounded_label.call(yScale_wounded)
+        xAxis_wounded_label.call(xAxis_wounded)
+        yAxis_wounded_label.call(yAxis_wounded)
 }
+// CSS Grid 
+// MOUSE ENTER< MOUSE OVER < MOUSE EXIT
+// ENTER AND EXIT RECOMMENDED 
