@@ -1,8 +1,8 @@
 /**
  * CONSTANTS AND GLOBALS
  * */
- const width = 1000,
-    height = 800,
+ const width = 500,
+    height = 500,
     margin = { top: 20, bottom: 50, left: 60, right: 40 };
 const width_1 = 1000,
     height_1 = 1000,
