@@ -166,8 +166,6 @@ function draw() {
 }   
 
 function bargraph_init(){
-    console.log(state.bargraph.Organizations)
-    console.log(yScale)
     // May need to pull this into the draw_bargraph since they're different with each click. 
     yScale = d3.scaleBand()
         .range([ height_1 - margin_1, margin_1])
@@ -217,7 +215,6 @@ function draw_bargraph() {
     //Updated yScale xScale
     yScale.domain(state.bargraph.Organizations).padding(0.2)
     xScale.domain([0, d3.max(state.bargraph.Attacks_Done)])
-    console.log(yScale(state.bargraph.Organizations))
     
     bargraph.selectAll(".bar")
         .data(state.bargraph)
@@ -271,7 +268,7 @@ function draw_bargraph() {
                 state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => d.iyear)
                 state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
                 state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
-
+                console.log(state.scatter_plot_kills)
                 console.log(state.scatter_plot_wounded)
                 draw_killed();
                 draw_wounded()})
@@ -394,7 +391,7 @@ function draw_wounded(){
     xScale_wounded.domain(state.scatter_plot_wounded.key)
     yScale_wounded.domain([ 0, d3.max(state.scatter_plot_wounded.value)])
     nwounded_plot.selectAll(".bar")
-        .data(state.scatter_plot_kills)
+        .data(state.scatter_plot_wounded)
         .join(
             enter => enter.append("rect")
                 .attr("class", "bar")
@@ -426,10 +423,69 @@ function draw_wounded(){
                 .attr("fill", "red")
                 .remove()
                 ),
+
         )
+        .on("click", (e, d) => {
+            selected = d[0]
+            state.written_info = storage_scatter.filter(function(d){
+                return d.iyear == selected
+                });
+            objArray = state.written_info
+            // console.log(objArray);
+            table_remove();
+            })
         xAxis_wounded_label.call(xAxis_wounded)
         yAxis_wounded_label.call(yAxis_wounded)
 }
 // CSS Grid 
 // MOUSE ENTER< MOUSE OVER < MOUSE EXIT
 // ENTER AND EXIT RECOMMENDED 
+
+
+
+// Columns I want 
+// iyear, imonth, iday , gname, city, attacktypye1_txt, target1, targetsub_type1_txt, target_type1_txt, weapdetail, weaptype_txt
+function table_remove(){
+    // Table.selectAll('tr').remove()
+    table_draw()
+    // Table.selectAll('tr').remove()
+}
+function table_init(){ 
+    let table = document.getElementById('Information')
+}
+function table_draw(){
+
+    year = objArray.map(a => a.iyear)
+    day = objArray.map(a => a.iday)
+    month = objArray.map(a => a.imonth)
+    gname = objArray.map(a => a.gname)
+    city = objArray.map(a => a.city)
+    attacktype = objArray.map(a => a.attacktype1_txt)
+    target = objArray.map(a => a.target1)
+    targetsubtype = objArray.map(a => a.targsubtype1_txt)
+    targettype = objArray.map(a => a.targtype1_txt)
+    weapdetail = objArray.map(a => a.weapdetail)
+    weapontype = objArray.map(a => a.weaptype1_txt)
+    wounded = objArray.map(a => a.nwound)
+    killed = objArray.map(a => a.nkill)
+    test = [month, day, year, city, gname, target, targetsubtype, attacktype, weapdetail, weapontype, wounded, killed]
+    state.table = test[0].map((_, colIndex) => test.map(row => row[colIndex]))
+
+
+    console.log(state.table)
+    let table = document.getElementById('Information')
+    var header = table.createTHead();
+    for (let row of state.table){
+        table.insertRow();
+        for (let cell of row){
+            let newCell = table.rows[table.rows.length - 1].insertCell();
+            newCell.textContent = cell; 
+        }
+    }
+    document.body.appendChild(table);
+    // console.dir(table)
+    // let headers = ['Month', 'Day', 'Year', 'City of Attack', 'Organization Name', 'Target of Attack', 'Target Category', 'Attack Type', 'Weapon Details', 'Weapon Type']
+    // let table = document.createElement('table');
+    // let headerRow = document.createElement('tr')
+
+}
