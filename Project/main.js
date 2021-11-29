@@ -8,7 +8,9 @@ const width_1 = 1000,
     height_1 = 1000,
     margin_1 = 200,
     radius_1 = 5;
-
+const width_bar = 400,
+    height_bar = 300,
+    margin_bar = 30
 let svg, 
     hoverBox,
     svg2;
@@ -82,7 +84,7 @@ const statelookup = new Map(state.full_data.map(d=> [d['province'] , d['iyear']]
 /* SVG AND CONTAINERS */ 
 
 console.log('statelookup :>>', statelookup);
-svg = d3.select("#container")
+svg = d3.select("#map")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
@@ -295,10 +297,10 @@ function nkills_bargraph_init(){
     // console.log(state.scatter_plot_kills)
     // console.log(state.scatter_plot_kills.value)
     xScale_scatter = d3.scaleBand()
-        .range([margin_1, width_1 - margin_1])
+        .range([margin_bar, width_bar - margin_bar])
         .padding(0.2)
     yScale_scatter = d3.scaleLinear()
-        .range([height_1 - margin_1, margin_1])
+        .range([height_bar - margin_bar, margin_bar])
     xAxis_scatter = d3.axisBottom(xScale_scatter)
         .scale(xScale_scatter)
     yAxis_scatter = d3.axisLeft(yScale_scatter)
@@ -306,14 +308,14 @@ function nkills_bargraph_init(){
 
     nkills_plot = d3.select("#scatter-plot")
         .append("svg")
-        .attr("width", width_1)
-        .attr("height", height_1)
+        .attr("width", width_bar)
+        .attr("height", height_bar)
     xAxis_2 = nkills_plot.append('g')
         .attr('class', 'x-axis')
-        .style("transform", `translate(${0}px,${height_1 - margin_1}px)`)
+        .style("transform", `translate(${0}px,${height_bar - margin_bar}px)`)
     yAxis_2 = nkills_plot.append('g')
         .attr('class', 'y-axis')
-        .style("transform", `translate(${margin_1}px,${0}px)`)
+        .style("transform", `translate(${margin_bar}px,${0}px)`)
 }
 
 
@@ -332,7 +334,7 @@ function draw_killed(){
                 })
                 .attr("y", d =>  yScale_scatter(d[1]))
                 .attr("width", xScale_scatter.bandwidth)
-                .attr("height", d => height_1 - margin_1- yScale_scatter(d[1]))
+                .attr("height", d => height_bar - margin_bar- yScale_scatter(d[1]))
                 .attr("fill", "red"),
             update => update.call(sel => sel.transition()
                 .duration(1000)
@@ -341,7 +343,7 @@ function draw_killed(){
                 })
                 .attr("y", d =>  yScale_scatter(d[1]))
                 .attr("width", xScale_scatter.bandwidth)
-                .attr("height", d => height_1 - margin_1- yScale_scatter(d[1]))
+                .attr("height", d => height_bar - margin_bar- yScale_scatter(d[1]))
                 .attr("fill", "red")
                 ),
             exit => exit.call(exit=> exit.transition()
@@ -351,7 +353,7 @@ function draw_killed(){
                 })
                 .attr("y", d =>  yScale_scatter(d[1]))
                 .attr("width", xScale_scatter.bandwidth)
-                .attr("height", d => height_1 - margin_1- yScale_scatter(d[1]))
+                .attr("height", d => height_bar - margin_bar- yScale_scatter(d[1]))
                 .attr("fill", "red")
                 .remove()
                 ),
@@ -363,10 +365,10 @@ function nwounded_bargraph_init(){
     // console.log(state.scatter_plot_kills)
     // console.log(state.scatter_plot_kills.value)
     xScale_wounded = d3.scaleBand()
-        .range([margin_1, width_1 - margin_1])
+        .range([margin_bar, width_bar - margin_bar])
         .padding(0.2)
     yScale_wounded = d3.scaleLinear()
-        .range([height_1 - margin_1, margin_1])
+        .range([height_bar - margin_bar, margin_bar])
     xAxis_wounded = d3.axisBottom(xScale_wounded)
         .scale(xScale_wounded)
     yAxis_wounded = d3.axisLeft(yScale_wounded)
@@ -374,14 +376,14 @@ function nwounded_bargraph_init(){
 
     nwounded_plot = d3.select("#nwounded-plot")
         .append("svg")
-        .attr("width", width_1)
-        .attr("height", height_1)
+        .attr("width", width_bar)
+        .attr("height", height_bar)
     xAxis_wounded_label = nwounded_plot.append('g')
         .attr('class', 'x-axis')
-        .style("transform", `translate(${0}px,${height_1 - margin_1}px)`)
+        .style("transform", `translate(${0}px,${height_bar - margin_bar}px)`)
     yAxis_wounded_label = nwounded_plot.append('g')
         .attr('class', 'y-axis')
-        .style("transform", `translate(${margin_1}px,${0}px)`)
+        .style("transform", `translate(${margin_bar}px,${0}px)`)
 }
 
 
@@ -400,7 +402,7 @@ function draw_wounded(){
                 })
                 .attr("y", d =>  yScale_wounded(d[1]))
                 .attr("width", xScale_wounded.bandwidth)
-                .attr("height", d => height_1 - margin_1- yScale_wounded(d[1]))
+                .attr("height", d => height_bar - margin_bar- yScale_wounded(d[1]))
                 .attr("fill", "red"),
             update => update.call(sel => sel.transition()
                 .duration(1000)
@@ -409,7 +411,7 @@ function draw_wounded(){
                 })
                 .attr("y", d =>  yScale_wounded(d[1]))
                 .attr("width", xScale_wounded.bandwidth)
-                .attr("height", d => height_1 - margin_1- yScale_wounded(d[1]))
+                .attr("height", d => height_bar - margin_bar- yScale_wounded(d[1]))
                 .attr("fill", "red")
                 ),
             exit => exit.call(exit=> exit.transition()
@@ -419,7 +421,7 @@ function draw_wounded(){
                 })
                 .attr("y", d =>  yScale_wounded(d[1]))
                 .attr("width", xScale_wounded.bandwidth)
-                .attr("height", d => height_1 - margin_1- yScale_wounded(d[1]))
+                .attr("height", d => height_bar - margin_bar- yScale_wounded(d[1]))
                 .attr("fill", "red")
                 .remove()
                 ),
