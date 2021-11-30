@@ -4,9 +4,9 @@
  const width = 500,
     height = 500,
     margin = { top: 20, bottom: 50, left: 60, right: 40 };
-const width_1 = 1000,
-    height_1 = 1000,
-    margin_1 = 200,
+const width_1 = 800,
+    height_1 = 700,
+    margin_1 = 30,
     radius_1 = 5;
 const width_bar = 400,
     height_bar = 300,
@@ -191,14 +191,19 @@ function bargraph_init(){
     xAxisLabel = bargraph.append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
-        .attr("x", 575 )
-        .attr("y", 840)
+        .attr("x", 0)
+        .attr("y", -500)
     yAxisLabel = bargraph.append("text")
         .attr("class", "y label")
         .attr("text-anchor", "end")
-        .attr("y", 150)
-        .attr("x", -450)
+        .attr("x", -330)
+        .attr("y", 10)
         .attr("dy", "0.75em")
+    title_bargraph = bargraph.append("text")
+        .attr("x", (width_1/2))
+        .attr("y", 0 - (margin_1/2))
+        .style("text-decoration", "underline")
+
 
 
 
@@ -278,6 +283,7 @@ function draw_bargraph() {
         yAxisg.call(yAxis).raise() // Raise Look It Up 
         xAxisLabel.text("Number Of Attacks")
         yAxisLabel.text("Organization Name").attr("transform", "rotate(-90)")
+        title_bargraph.text("Organization vs Number of Attacks")
     // bargraph.append('g')
     //     .call( xAxis )
     //     .attr('class', 'x-axis')
