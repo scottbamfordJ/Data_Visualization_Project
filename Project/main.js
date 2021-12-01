@@ -440,7 +440,7 @@ function draw_wounded(){
                 });
             objArray = state.written_info
             // console.log(objArray);
-            table_remove();
+            table_draw();
             })
         xAxis_wounded_label.call(xAxis_wounded)
         yAxis_wounded_label.call(yAxis_wounded)
@@ -459,7 +459,13 @@ function table_remove(){
     // Table.selectAll('tr').remove()
 }
 function table_init(){ 
-    let table = document.getElementById('Information')
+    let table = d3.select("body").append("table")
+    let headers = ['Month', 'Day', 'Year', 'City of Attack', 
+        'Organization Name', 'Target of Attack', 'Target Category', 
+        'Attack Type', 'Weapon Details', 'Weapon Type']
+    let thead = table.append("thead")
+    let tbody = table.append("tbody")
+
 }
 function table_draw(){
 
@@ -476,23 +482,80 @@ function table_draw(){
     weapontype = objArray.map(a => a.weaptype1_txt)
     wounded = objArray.map(a => a.nwound)
     killed = objArray.map(a => a.nkill)
+
+
     test = [month, day, year, city, gname, target, targetsubtype, attacktype, weapdetail, weapontype, wounded, killed]
     state.table = test[0].map((_, colIndex) => test.map(row => row[colIndex]))
+    state.table_headers = ['Month', 'Day', 'Year', 'City of Attack', 
+    'Organization Name', 'Target of Attack', 'Target Category', 
+    'Attack Type', 'Weapon Details', 'Weapon Type', 'Number Wounded', "Number Killed"
+]
+    var columns = [
+        {head: 'Month', cl: 'num', html: function(row) {return f[0]}},
+        {head: 'Day', cl: 'num', html: function(row) {return f[1]}},
+        {head: 'Year', cl: 'num', html: function(row) {return f[2]}},
+        {head: 'City of Attack', cl: 'center', html: function(row) {return row[3]}},
+        {head: 'Organization Name', cl: 'center', html: function(row) {return row[4]}},
+        {head: 'Target of Attack', cl: 'center', html: function(row) {return row[5]}},
+        {head: 'Target Category', cl: 'center', html: function(row) {return row[6]}},
+        {head: 'Attack Type', cl: 'center', html: function(row) {return row[7]}},
+        {head: 'Weapon Details', cl: 'center', html: function(row) {return row[8]}},
+        {head: 'Weapon Type', cl: 'center', html: function(row) {return row[9]}},
+        {head: 'Number Wounded', cl: 'num', html: function(row) {return row[10]}},
+        {head: 'Number Killed', cl: 'num', html: function(row) {return row[11]}}
+    ]
 
+    state.table_test = [
+        {'Month':month, 'Day':day, 'Year':year, 'City': city, 
+        'Oraganization Name': gname, 'Target of Attack': target, 'Target Category': targetsubtype, 
+        'Attack Type': attacktype, 'Weapon Details': weapdetail, 'Weapon Type':weapontype, 
+        'Number Wounded': wounded, 'Number Killed': killed}
+    ]
+
+    table = d3.select('#Information').append('table')
+    var thead = table.append('thead')
+    var tbody = table.append('tbody')
+
+    thead.append('tr')
+        .selectAll('th')
+        .data(state.table_headers).enter()
+        .append('th')
+            .text(function(d){return d})
+    var rows = tbody.selectAll('tr')
+        .data(state.table)
+        .enter()
+        .append('tr');
 
     console.log(state.table)
-    let table = document.getElementById('Information')
-    var header = table.createTHead();
-    for (let row of state.table){
-        table.insertRow();
-        for (let cell of row){
-            let newCell = table.rows[table.rows.length - 1].insertCell();
-            newCell.textContent = cell; 
-        }
-    }
-    document.body.appendChild(table);
+
+
+    // table.append('tbody')
+    //     .selectAll('tr')
+    //     .data(state.table).enter()
+    //     .append('tr')
+    //     .selectAll('td')
+    //     .data(function(row, i){
+    //         return columns.map(function(c){
+    //             var cell = {}
+    //             d3.keys(c).forEach(function(k){
+    //                 cell[k] = typeof c[k] == 'function' ? c[k](row,i) : c[k];
+    //             });
+    //             return cell;
+    //         })
+    //     }).enter()
+    //     .append('td')
+    //     .html(function())
+    // var header = table.createTHead();
+    // for (let row of state.table){
+    //     table.insertRow();
+    //     for (let cell of row){
+    //         let newCell = table.rows[table.rows.length - 1].insertCell();
+    //         newCell.textContent = cell; 
+    //     }
+    // }
+    // document.body.appendChild(table);
     // console.dir(table)
-    // let headers = ['Month', 'Day', 'Year', 'City of Attack', 'Organization Name', 'Target of Attack', 'Target Category', 'Attack Type', 'Weapon Details', 'Weapon Type']
+    //
     // let table = document.createElement('table');
     // let headerRow = document.createElement('tr')
 
