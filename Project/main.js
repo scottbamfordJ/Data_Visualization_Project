@@ -6,7 +6,7 @@
 //Create a ToolTip to Explain how to interact with the bargraph's and stuff 
 //
  const width = 1100,
-    height = 1000,
+    height = 740,
     margin = { top: 20, bottom: 50, left: 60, right: 40 };
 const width_1 = 1100,
     height_1 = 900,
@@ -343,8 +343,8 @@ function nkills_bargraph_init(){
     xAxisLabel_nkills = nkills_plot.append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
-        .attr("x", 200)
-        .attr("y", 280)
+        .attr("x", width_bar/2)
+        .attr("y", height_bar)
         .style("font-size", "10px")
     yAxisLabel_nkills = nkills_plot.append("text")
         .attr("class", "y label")
@@ -448,8 +448,8 @@ function nwounded_bargraph_init(){
     xAxisLabel_nwounded = nwounded_plot.append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
-        .attr("x", 200)
-        .attr("y", 280)
+        .attr("x", width_bar/2)
+        .attr("y", height_bar)
         .style("font-size", "10px")
     yAxisLabel_nwounded = nwounded_plot.append("text")
         .attr("class", "y label")
