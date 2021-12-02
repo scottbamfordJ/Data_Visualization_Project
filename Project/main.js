@@ -7,10 +7,10 @@
 const width_1 = 800,
     height_1 = 700,
     margin_1 = 30,
-    radius_1 = 5;
+    radius_1 = 20;
 const width_bar = 400,
     height_bar = 300,
-    margin_bar = 30
+    margin_bar = 50
 let svg, 
     hoverBox,
     svg2;
@@ -30,12 +30,18 @@ let xAxis_scatter;
 let yAxis_scatter;
 let xAxis_2;
 let yAxis_2;
+let yAxisLabel_nkills;
+let xAxisLabel_nkills;
+let AxisLabeltitle_nkills;
 let xScale_wounded;
 let yScale_wounded;
 let xAxis_wounded;
 let yAxis_wounded;
 let xAxis_wounded_label;
 let yAxis_wounded_label;
+let xAxisLabel_nwounded;
+let yAxisLabel_nwounded;
+let AxisLabeltitle_nwounded;
 /**
 * APPLICATION STATE
 * */
@@ -191,8 +197,8 @@ function bargraph_init(){
     xAxisLabel = bargraph.append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
-        .attr("x", 0)
-        .attr("y", -500)
+        .attr("x", 400)
+        .attr("y", 700)
     yAxisLabel = bargraph.append("text")
         .attr("class", "y label")
         .attr("text-anchor", "end")
@@ -200,8 +206,9 @@ function bargraph_init(){
         .attr("y", 10)
         .attr("dy", "0.75em")
     title_bargraph = bargraph.append("text")
-        .attr("x", (width_1/2))
-        .attr("y", 0 - (margin_1/2))
+        .attr("x", 200)
+        .attr("y", 30)
+        .style("font-size", "16px")
         .style("text-decoration", "underline")
 
 
@@ -322,6 +329,23 @@ function nkills_bargraph_init(){
     yAxis_2 = nkills_plot.append('g')
         .attr('class', 'y-axis')
         .style("transform", `translate(${margin_bar}px,${0}px)`)
+    xAxisLabel_nkills = nkills_plot.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", 170)
+        .attr("y", 300)
+    yAxisLabel_nkills = nkills_plot.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("x", -100)
+        .attr("y", 15)
+        .attr("dy", "0.5em")
+    AxisLabeltitle_nkills = nkills_plot.append("text")
+        .attr("x", 20)
+        .attr("y", 30)
+        .style("font-size", "16px")
+        .style("text-decoration", "underline")
+    
 }
 
 
@@ -366,6 +390,10 @@ function draw_killed(){
         )
         xAxis_2.call(xAxis_scatter)
         yAxis_2.call(yAxis_scatter)
+        xAxisLabel_nkills.text("Year")
+        yAxisLabel_nkills.text("Number of Kills").attr("transform", "rotate(-90)")
+        AxisLabeltitle_nkills.text("Number of Killed from Terrorist Attack Per Year")
+
 }
 function nwounded_bargraph_init(){ 
     // console.log(state.scatter_plot_kills)
@@ -390,7 +418,23 @@ function nwounded_bargraph_init(){
     yAxis_wounded_label = nwounded_plot.append('g')
         .attr('class', 'y-axis')
         .style("transform", `translate(${margin_bar}px,${0}px)`)
-}
+    xAxisLabel_nwounded = nwounded_plot.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", 170)
+        .attr("y", 300)
+    yAxisLabel_nwounded = nwounded_plot.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("x", -100)
+        .attr("y", 15)
+        .attr("dy", "0.5em")
+    AxisLabeltitle_nwounded = nwounded_plot.append("text")
+        .attr("x", 20)
+        .attr("y", 30)
+        .style("font-size", "16px")
+        .style("text-decoration", "underline")
+    }
 
 
 
@@ -444,6 +488,10 @@ function draw_wounded(){
             })
         xAxis_wounded_label.call(xAxis_wounded)
         yAxis_wounded_label.call(yAxis_wounded)
+        xAxisLabel_nwounded.text("Year")
+        yAxisLabel_nwounded.text("Number Wounded").attr("transform", "rotate(-90)")
+        AxisLabeltitle_nwounded.text("Number of Wounded By Year")
+
 }
 // CSS Grid 
 // MOUSE ENTER< MOUSE OVER < MOUSE EXIT
