@@ -1,23 +1,58 @@
 <!DOCTYPE html>
   <head>
     <meta charset="utf-8">
-    <title>Interactive Data Visualization Tutorial</title>
+    <title>Interactive Data Visualization</title>
+
     <link rel="stylesheet" href="./style.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro">
   </head>
   <body>
     
     <h3>United States Terrorism from 1970 - 2018</h3>
+      <p>
+        United States Terrorism has become a major reason for its Involvement in International problems and activites. The rational is that In order to protect within the boarders within
+        the country we can do this by preventing people terrorist organizations from developing outside of the country. But with the interconnectivity that countries have with one another as well
+        technological advances creates another problem of Terroristr ORganizations recuriting as well as planning and exucting attacks without in person communcations. 
+      </p>
+      <p>
+        <strong> The Map and the Bargraphs are Interactable! Click Around!</strong>
+      </p>
+    <nav>
+      <a href = "#USMap"> United States Map</a>
+      <a href = "#OrgBarChart"> Organizational Bar Chart</a>
+      <a href = "#OrgBarKill"> Organizational Number Killed</a>
+      <a href = "#OrgBarWound"> Organizational Number Wounded</a>
+      <a href = "#General_Information"> Information on Attacks</a>
+    </nav>
+    
     <!-- <select id = "dropdown" name = "dropdown"></select> -->
-    <div class = "container">
-      <div id="hover-content"> </div>
-      <div id="map"> </div>
-      <div id = "bargraph"></div>
-      <div id = "scatter-plot"></div>
-      <div id = "nwounded-plot"></div>
-      <table id = "Information"></table>
-    </div>
-
+    <div class = container>
+      <section id = "USMap">
+        <a name = "top"></a>
+        <h2>United States Map</h2>
+        <div id="hover-content"> </div>
+        <div id="map"> </div>
+      </section>
+      <section id = "OrgBarChart">
+        <h2>State Terrorist Attacks</h2>
+        <div id = "bargraph"></div>
+        <a href="#top">Back to top</a>
+      </section>
+      <section id = "OrgBarKill">
+        <h2>Terrorist Organization's Wounded</h2>
+        <div id = "scatter-plot"></div>
+        <a href="#top">Back to top</a>
+      </section>
+      <selection id = "OrgBarWound">
+        <h2>Terrorist Organization's Wounded</h2>
+        <div id = "nwounded-plot"></div>
+        <a href="#top">Back to top</a>
+      </selection>
+      <selection id = General_Information>
+        <h2>Information on Attack Done</h2>
+        <table id = "Information"></table>
+      </selection>
+  </div>
     <script src="../lib/d3.js"></script>
     <script src="main.js"></script>
     <script src = "https://d3js.org/d3-collection.v1.min.js"></script>

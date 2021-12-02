@@ -20,82 +20,94 @@ p {
 }
 
 #tooltip {
+  margin-top: 10px; /* change default value */
+  margin-left: 10px; /* change default value */
+  height: 100%;
+  width: 740px;
+  color: rgb(0, 140, 255);
+  text-decoration: none;
+  font-size: 20px;
+  font-family: sans-serif;
   display: block;
-  height: 50px;
+}
+#USMap{
+  margin-top: 10px; /* change default value */
+  margin-left: 10px; /* change default value */
+  height: 100%;
+  width: 740px;
+  color: rgb(0, 140, 255);
+  text-decoration: none;
+  font-size: 20px;
+  font-family: sans-serif;
+  display: block;
 }
 
+#OrgBarChart{
+  margin-top: 10px; /* change default value */
+  margin-left: 10px; /* change default value */
+  height: 100%;
+  width: 740px;
+  color: rgb(0, 140, 255);
+  text-decoration: none;
+  font-size: 20px;
+  font-family: sans-serif;
+  display: block;
+}
+#OrgBarWoundKill{
+  margin-top: 10px; /* change default value */
+  margin-left: 10px; /* change default value */
+  height: 100%;
+  width: 740px;
+  color: rgb(0, 140, 255);
+  text-decoration: none;
+  font-size: 20px;
+  font-family: sans-serif;
+  display: block;
+}
+#General_Information{
+  margin-top: 10px; /* change default value */
+  margin-left: 10px; /* change default value */
+  height: 100%;
+  width: 740px;
+  color: rgb(0, 140, 255);
+  text-decoration: none;
+  font-size: 20px;
+  font-family: sans-serif;
+  display: block;
+}
 path.state {
   stroke: black;
 }
 
-/* .container {
-    display: grid;
-    grid-template-columns: 0.1fr repeat(1, 0.5fr);
-    grid-template-rows: repeat(5, 1fr);
-    grid-column-gap: 6px;
-    grid-row-gap: 4px;
-    } 
-
-  
-  .hover-content { grid-area: 1 / 1 / 2 / 2; } 
-  .container { grid-area: 1 / 2 / 3 / 3; }  
-
-  
-  .bargraph { grid-area: 1 / 3 / 3 / 4; } 
-  
-  .scatter-plot { grid-area: 3 / 2 / 4 / 3; } 
-  
-  .nwounded-plot{ grid-area: 3 / 3 / 4 / 4; } 
-  
-  .Information { grid-area: 3 / 1 / 4 / 2; }  */
-  
-
-/* .container {
-  display: grid;
-  grid-template-columns: 0.1fr repeat(1, 0.5fr);
-  grid-template-rows: 100px repeat(4, 400px);
-  grid-column-gap: 6px;
-  grid-row-gap: 4px;
-  }
-  
-  .hover-content { grid-area: 1 / 1 / 2 / 2; }
-  .container { grid-area: 2 / 2 / 3 / 3; }
-  .bargraph { grid-area: 2 / 3 / 3 / 4; }
-  .scatter-plot { grid-area: 3 / 2 / 4 / 3; }
-  .nwounded-plot { grid-area: 3 / 3 / 4 / 4; }
-  .Information { grid-area: 4 / 2 / 5 / 3; } 
-
-   */
-
 /* Change Pointer to Click. */
 .container{
   display:grid;
-  grid-template-columns: 150px, 740px, 740px, 740px;
-  grid-template-rows: 100px, 1000px, 1000px, 1000px;
+  grid-template-columns: 1/1/1/1;
+  grid-template-rows: 1/1/1/1;
 }
 #hover-content{
     grid-column-start: 1;
-    grid-column-end: 2;
+    grid-column-end: 3;
     grid-row-start: 1;
     grid-row-end: 2;
   }
 
-#map{
+#USMap{
   grid-column-start: 1;
-  grid-column-end: 2;
+  grid-column-end: 3;
   grid-row-start: 1;
   grid-row-end: 2;
   z-index: 20;
 }
-#bargraph{
+/* #bargraph{
   grid-column-start: 2;
   grid-column-end: 3;
   grid-row-start: 1;
   grid-row-end: 4;
-}
-#scatter-plot{
+} */
+#OrgBarChart{
   grid-column-start: 1;
-  grid-column-end: 2;
+  grid-column-end: 3;
   grid-row-start: 2;
   grid-row-end: 3;
 }
@@ -106,8 +118,8 @@ path.state {
   grid-row-end: 4;
 }
 #Information{
-  grid-column-start: 2;
-  grid-column-end: 3;
+  grid-column-start: 1;
+  grid-column-end: 4;
   grid-row-start: 3;
   grid-row-end: 4;
 }

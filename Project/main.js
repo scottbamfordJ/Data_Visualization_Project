@@ -5,11 +5,11 @@
 
 //Create a ToolTip to Explain how to interact with the bargraph's and stuff 
 //
- const width = 500,
-    height = 500,
+ const width = 1100,
+    height = 1000,
     margin = { top: 20, bottom: 50, left: 60, right: 40 };
-const width_1 = 800,
-    height_1 = 700,
+const width_1 = 1100,
+    height_1 = 900,
     margin_1 = 30,
     radius_1 = 20;
 const width_bar = 500,
@@ -201,17 +201,21 @@ function bargraph_init(){
     yAxisg = bargraph.append('g')
         .attr('class', 'y-axis')
         .style("transform", `translate(${margin_1}px,${0}px)`)
+        .style("color", "black")
     xAxisLabel = bargraph.append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
-        .attr("x", 400)
-        .attr("y", 700)
+        .attr("x", width_1 / 2)
+        .attr("y", height_1)
+        .style("font-size", "10px")
     yAxisLabel = bargraph.append("text")
         .attr("class", "y label")
         .attr("text-anchor", "end")
         .attr("x", -330)
         .attr("y", 10)
         .attr("dy", "0.75em")
+        .style("font-size", "9px")
+        .style("color", "black")
     title_bargraph = bargraph.append("text")
         .attr("x", 200)
         .attr("y", 30)
@@ -341,12 +345,14 @@ function nkills_bargraph_init(){
         .attr("text-anchor", "end")
         .attr("x", 200)
         .attr("y", 280)
+        .style("font-size", "10px")
     yAxisLabel_nkills = nkills_plot.append("text")
         .attr("class", "y label")
         .attr("text-anchor", "end")
         .attr("x", -100)
         .attr("y", 15)
         .attr("dy", "0.5em")
+        .style("font-size", "10px")
     AxisLabeltitle_nkills = nkills_plot.append("text")
         .attr("x", 20)
         .attr("y", 30)
@@ -444,12 +450,14 @@ function nwounded_bargraph_init(){
         .attr("text-anchor", "end")
         .attr("x", 200)
         .attr("y", 280)
+        .style("font-size", "10px")
     yAxisLabel_nwounded = nwounded_plot.append("text")
         .attr("class", "y label")
         .attr("text-anchor", "end")
         .attr("x", -100)
         .attr("y", 15)
         .attr("dy", "0.5em")
+        .style("font-size", "10px")
     AxisLabeltitle_nwounded = nwounded_plot.append("text")
         .attr("x", 20)
         .attr("y", 30)
@@ -627,6 +635,8 @@ function table_draw(){
         .text(function(d){
             return d;
         })
+        .style("font-size", "10px")
+        .style("color", "black")
     cells.text(function(d){
         return d;
     });
