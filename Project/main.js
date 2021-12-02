@@ -1,6 +1,10 @@
 /**
  * CONSTANTS AND GLOBALS
  * */
+
+
+//Create a ToolTip to Explain how to interact with the bargraph's and stuff 
+//
  const width = 500,
     height = 500,
     margin = { top: 20, bottom: 50, left: 60, right: 40 };
@@ -8,7 +12,7 @@ const width_1 = 800,
     height_1 = 700,
     margin_1 = 30,
     radius_1 = 20;
-const width_bar = 400,
+const width_bar = 500,
     height_bar = 300,
     margin_bar = 50
 let svg, 
@@ -42,6 +46,9 @@ let yAxis_wounded_label;
 let xAxisLabel_nwounded;
 let yAxisLabel_nwounded;
 let AxisLabeltitle_nwounded;
+let table;
+let thead;
+let tbody;
 /**
 * APPLICATION STATE
 * */
@@ -290,7 +297,7 @@ function draw_bargraph() {
         yAxisg.call(yAxis).raise() // Raise Look It Up 
         xAxisLabel.text("Number Of Attacks")
         yAxisLabel.text("Organization Name").attr("transform", "rotate(-90)")
-        title_bargraph.text("Organization vs Number of Attacks")
+        title_bargraph.text("Organization vs Number of Attacks in " + state.click_state)
     // bargraph.append('g')
     //     .call( xAxis )
     //     .attr('class', 'x-axis')
@@ -332,8 +339,8 @@ function nkills_bargraph_init(){
     xAxisLabel_nkills = nkills_plot.append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
-        .attr("x", 170)
-        .attr("y", 300)
+        .attr("x", 200)
+        .attr("y", 280)
     yAxisLabel_nkills = nkills_plot.append("text")
         .attr("class", "y label")
         .attr("text-anchor", "end")
@@ -345,15 +352,24 @@ function nkills_bargraph_init(){
         .attr("y", 30)
         .style("font-size", "16px")
         .style("text-decoration", "underline")
+    Empty_killed = nkills_plot.append("text")
+        .attr("id", "EmptyValue_kills")
+        .attr("x", (width_bar - 200) / 2)
+        .attr("y", height_bar / 2)
+        .style("font-size", "20px")
+        .style("text-decoration", "bold")
+
     
 }
 
-
+// Ancor Tabs (Make Anchor Tabs) 
 
 function draw_killed(){  
 
     xScale_scatter.domain(state.scatter_plot_kills.key)
-    yScale_scatter.domain([ 0, d3.max(state.scatter_plot_kills.value)])
+    yScale_scatter.domain([ 0, d3.max(state.scatter_plot_kills.value) + 1])
+
+    //
     nkills_plot.selectAll(".bar")
         .data(state.scatter_plot_kills)
         .join(
@@ -392,7 +408,12 @@ function draw_killed(){
         yAxis_2.call(yAxis_scatter)
         xAxisLabel_nkills.text("Year")
         yAxisLabel_nkills.text("Number of Kills").attr("transform", "rotate(-90)")
-        AxisLabeltitle_nkills.text("Number of Killed from Terrorist Attack Per Year")
+        AxisLabeltitle_nkills.text("Killed by " + state.Bargraph_2Seleceted)
+        if (d3.max(state.scatter_plot_kills.value) == 0){
+            Empty_killed.text("there were no Kills")
+        } else {
+            Empty_killed.text("")
+        }
 
 }
 function nwounded_bargraph_init(){ 
@@ -421,8 +442,8 @@ function nwounded_bargraph_init(){
     xAxisLabel_nwounded = nwounded_plot.append("text")
         .attr("class", "x label")
         .attr("text-anchor", "end")
-        .attr("x", 170)
-        .attr("y", 300)
+        .attr("x", 200)
+        .attr("y", 280)
     yAxisLabel_nwounded = nwounded_plot.append("text")
         .attr("class", "y label")
         .attr("text-anchor", "end")
@@ -434,6 +455,12 @@ function nwounded_bargraph_init(){
         .attr("y", 30)
         .style("font-size", "16px")
         .style("text-decoration", "underline")
+    Empty_wounded = nwounded_plot.append("text")
+        .attr("id", "EmptyWounded")
+        .attr("x", (width_bar - 200) / 2)
+        .attr("y", height_bar / 2)
+        .style("font-size", "20px")
+        .style("text-decoration", "bold")
     }
 
 
@@ -441,7 +468,12 @@ function nwounded_bargraph_init(){
 function draw_wounded(){  
 
     xScale_wounded.domain(state.scatter_plot_wounded.key)
-    yScale_wounded.domain([ 0, d3.max(state.scatter_plot_wounded.value)])
+    yScale_wounded.domain([ 0, d3.max(state.scatter_plot_wounded.value) + 1 ])
+    if (d3.max(state.scatter_plot_wounded.value) == 0){
+        nwounded_plot.append("text")
+            .text("None")
+    }
+
     nwounded_plot.selectAll(".bar")
         .data(state.scatter_plot_wounded)
         .join(
@@ -453,7 +485,8 @@ function draw_wounded(){
                 .attr("y", d =>  yScale_wounded(d[1]))
                 .attr("width", xScale_wounded.bandwidth)
                 .attr("height", d => height_bar - margin_bar- yScale_wounded(d[1]))
-                .attr("fill", "red"),
+                .attr("fill", "Orange"),
+
             update => update.call(sel => sel.transition()
                 .duration(1000)
                 .attr("x", d => {
@@ -462,7 +495,7 @@ function draw_wounded(){
                 .attr("y", d =>  yScale_wounded(d[1]))
                 .attr("width", xScale_wounded.bandwidth)
                 .attr("height", d => height_bar - margin_bar- yScale_wounded(d[1]))
-                .attr("fill", "red")
+                .attr("fill", "Orange")
                 ),
             exit => exit.call(exit=> exit.transition()
                 .duration(10)
@@ -472,7 +505,7 @@ function draw_wounded(){
                 .attr("y", d =>  yScale_wounded(d[1]))
                 .attr("width", xScale_wounded.bandwidth)
                 .attr("height", d => height_bar - margin_bar- yScale_wounded(d[1]))
-                .attr("fill", "red")
+                .attr("fill", "Orange")
                 .remove()
                 ),
 
@@ -484,13 +517,18 @@ function draw_wounded(){
                 });
             objArray = state.written_info
             // console.log(objArray);
-            table_draw();
+            table_init();
             })
         xAxis_wounded_label.call(xAxis_wounded)
         yAxis_wounded_label.call(yAxis_wounded)
         xAxisLabel_nwounded.text("Year")
         yAxisLabel_nwounded.text("Number Wounded").attr("transform", "rotate(-90)")
-        AxisLabeltitle_nwounded.text("Number of Wounded By Year")
+        AxisLabeltitle_nwounded.text("Wounded By " + state.Bargraph_2Seleceted)
+        if (d3.max(state.scatter_plot_wounded.value) == 0){
+            Empty_wounded.text("there were no wounded")
+        } else {
+            Empty_wounded.text("")
+        }
 
 }
 // CSS Grid 
@@ -507,13 +545,11 @@ function table_remove(){
     // Table.selectAll('tr').remove()
 }
 function table_init(){ 
-    let table = d3.select("body").append("table")
-    let headers = ['Month', 'Day', 'Year', 'City of Attack', 
-        'Organization Name', 'Target of Attack', 'Target Category', 
-        'Attack Type', 'Weapon Details', 'Weapon Type']
-    let thead = table.append("thead")
-    let tbody = table.append("tbody")
-
+ 
+    
+    table_draw()
+    
+        
 }
 function table_draw(){
 
@@ -560,20 +596,40 @@ function table_draw(){
         'Number Wounded': wounded, 'Number Killed': killed}
     ]
 
-    table = d3.select('#Information').append('table')
-    var thead = table.append('thead')
-    var tbody = table.append('tbody')
-
+    columns = ['Month', 'Day', 'Year', 'City of Attack', 
+    'Organization Name', 'Target of Attack', 'Target Category', 
+    'Attack Type', 'Weapon Details', 'Weapon Type', 'Number Wounded', "Number Killed"
+]       
+    let headers = ['Month', 'Day', 'Year', 'City of Attack', 
+    'Organization Name', 'Target of Attack', 'Target Category', 
+    'Attack Type', 'Weapon Details', 'Weapon Type'
+    ]
+    table = d3.select("#Information").append("table")
+    let thead = table.append("thead");
+    let tbody = table.append("tbody");
     thead.append('tr')
         .selectAll('th')
-        .data(state.table_headers).enter()
+        .data(headers).enter()
         .append('th')
-            .text(function(d){return d})
-    var rows = tbody.selectAll('tr')
-        .data(state.table)
-        .enter()
-        .append('tr');
+        .text(function(d){return d})
 
+    
+    rows = tbody.selectAll('tr').data(state.table)
+    rows.exit().remove()
+    rows = rows.enter().append("tr").merge(rows);
+
+    var cells = rows.selectAll('td')
+        .data(function(d, i) {
+            return Object.values(d);
+        });
+    cells.exit().remove();
+    cells.enter().append("td")
+        .text(function(d){
+            return d;
+        })
+    cells.text(function(d){
+        return d;
+    });
     console.log(state.table)
 
 

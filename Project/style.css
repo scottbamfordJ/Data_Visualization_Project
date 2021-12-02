@@ -67,7 +67,7 @@ path.state {
 
    */
 
-
+/* Change Pointer to Click. */
 .container{
   display:grid;
   grid-template-columns: 150px, 740px, 740px, 740px;
