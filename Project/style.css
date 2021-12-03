@@ -94,7 +94,7 @@ path.state {
 
 #USMap{
   grid-column-start: 1;
-  grid-column-end: 3;
+  grid-column-end: 4;
   grid-row-start: 1;
   grid-row-end: 2;
   z-index: 20;
@@ -111,15 +111,27 @@ path.state {
   grid-row-start: 2;
   grid-row-end: 3;
 }
-#nwounded-plot{
+#OrgBarKill{
   grid-column-start: 1;
   grid-column-end: 2;
   grid-row-start: 3;
   grid-row-end: 4;
 }
-#Information{
-  grid-column-start: 1;
+#OrgBarWound{
+  grid-column-start: 2;
+  grid-column-end: 3;
+  grid-row-start: 3;
+  grid-row-end: 4;
+}
+#OrgBarNone{
+  grid-column-start: 3;
   grid-column-end: 4;
   grid-row-start: 3;
   grid-row-end: 4;
+}
+#General_Information{
+  grid-column-start: 1;
+  grid-column-end: 4;
+  grid-row-start: 4;
+  grid-row-end: 5;
 }

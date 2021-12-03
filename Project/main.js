@@ -46,9 +46,20 @@ let yAxis_wounded_label;
 let xAxisLabel_nwounded;
 let yAxisLabel_nwounded;
 let AxisLabeltitle_nwounded;
+let xScale_none;
+let yScale_none;
+let xAxis_none;
+let yAxis_none;
+let xAxis_none_label
+let yAxis_none_label
+let xAxisLabel_none
+let yAxisLabel_none
+let AxisLabeltitle_none
+let none_wounded
 let table;
 let thead;
 let tbody;
+
 /**
 * APPLICATION STATE
 * */
@@ -79,6 +90,7 @@ init();
 bargraph_init();
 nkills_bargraph_init();
 nwounded_bargraph_init();
+no_wounded_kill_init();
 });
 
 /**
@@ -233,6 +245,7 @@ function bargraph_init(){
 function Remove_svg(){
     nkills_plot.selectAll("rect").remove();
     nwounded_plot.selectAll("rect").remove();
+    none_plot.selectAll("rect").remove();
 }
 function draw_bargraph() {
     var parse = d3.timeParse("%Y")
@@ -287,18 +300,24 @@ function draw_bargraph() {
                     return d.gname == state.Bargraph_2Seleceted
                     });
                 storage_scatter = state.Bargraph_2info
-
-                state.scatter_plot_kills = d3.rollup(storage_scatter, v => d3.sum( v , d => +d.nkill), d =>d.iyear)
+                console.log(storage_scatter)
+                storage_none = storage_scatter.filter(function (d){return d.nwound && d.nkill == 0})
+                console.log(storage_none)
+                state.scatter_plot_kills = d3.rollup(storage_scatter,v => d3.sum(v , d => +d.nkill), d =>d.iyear)
                 state.scatter_plot_kills.key = Array.from(state.scatter_plot_kills.keys())
                 state.scatter_plot_kills.value = Array.from(state.scatter_plot_kills.values())
-
                 state.scatter_plot_wounded = d3.rollup(storage_scatter, v => d3.sum(v , d => +d.nwound), d => d.iyear)
                 state.scatter_plot_wounded.key = Array.from(state.scatter_plot_wounded.keys())
                 state.scatter_plot_wounded.value = Array.from(state.scatter_plot_wounded.values())
+                state.bar_plot_none = d3.rollup(storage_none, v => v.length, d => d.iyear)
+                state.bar_plot_none.key = Array.from(state.bar_plot_none.keys())
+                state.bar_plot_none.value = Array.from(state.bar_plot_none.values())
                 console.log(state.scatter_plot_kills)
                 console.log(state.scatter_plot_wounded)
+                console.log(state.bar_plot_none)
                 draw_killed();
-                draw_wounded()
+                draw_wounded();
+                draw_none();
                 window.location.href ="#OrgBarKill";
             })
         xAxisg.call(xAxis)
@@ -436,6 +455,7 @@ function draw_killed(){
         }
 
 }
+
 function nwounded_bargraph_init(){ 
     // console.log(state.scatter_plot_kills)
     // console.log(state.scatter_plot_kills.value)
@@ -485,7 +505,7 @@ function nwounded_bargraph_init(){
         .style("text-decoration", "bold")
     }
 
-
+    
 
 function draw_wounded(){  
 
@@ -554,11 +574,127 @@ function draw_wounded(){
         }
 
 }
+function no_wounded_kill_init (){
+    xScale_none = d3.scaleBand()
+        .range([margin_bar, width_bar - margin_bar])
+        .padding(0.2)
+    yScale_none = d3.scaleLinear()
+        .range([height_bar - margin_bar, margin_bar])
+    xAxis_none = d3.axisBottom(xScale_wounded)
+        .scale(xScale_wounded)
+    yAxis_none = d3.axisLeft(yScale_wounded)
+        .scale(yScale_wounded)
+
+    none_plot = d3.select("#none-plot")
+        .append("svg")
+        .attr("width", width_bar)
+        .attr("height", height_bar)
+    xAxis_none_label = none_plot.append('g')
+        .attr('class', 'x-axis')
+        .style("transform", `translate(${0}px,${height_bar - margin_bar}px)`)
+    yAxis_none_label = none_plot.append('g')
+        .attr('class', 'y-axis')
+        .style("transform", `translate(${margin_bar}px,${0}px)`)
+    xAxisLabel_none = none_plot.append("text")
+        .attr("class", "x label")
+        .attr("text-anchor", "end")
+        .attr("x", width_bar/2)
+        .attr("y", height_bar)
+        .style("font-size", "10px")
+    yAxisLabel_none = none_plot.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("x", -100)
+        .attr("y", 15)
+        .attr("dy", "0.5em")
+        .style("font-size", "10px")
+    AxisLabeltitle_none = none_plot.append("text")
+        .attr("x", 20)
+        .attr("y", 30)
+        .style("font-size", "16px")
+        .style("text-decoration", "underline")
+    none_wounded = none_plot.append("text")
+        .attr("id", "EmptyWounded")
+        .attr("x", (width_bar - 200) / 2)
+        .attr("y", height_bar / 2)
+        .style("font-size", "20px")
+        .style("text-decoration", "bold")
+ }
+
+
+function draw_none(){
+
+    xScale_none.domain(state.scatter_plot_wounded.key)
+    yScale_none.domain([ 0, d3.max(state.bar_plot_none.value) + 1 ])
+    if (d3.max(state.bar_plot_none.value) == 0){
+        none_plot.append("text")
+            .text("None")
+    }
+
+    none_plot.selectAll(".bar")
+        .data(state.bar_plot_none)
+        .join(
+            enter => enter.append("rect")
+                .attr("class", "bar")
+                .attr("x", d => {
+                    return xScale_none(d[0])
+                })
+                .attr("y", d =>  yScale_none(d[1]))
+                .attr("width", xScale_none.bandwidth)
+                .attr("height", d => height_bar - margin_bar- yScale_none(d[1]))
+                .attr("fill", "Orange"),
+
+            update => update.call(sel => sel.transition()
+                .duration(1000)
+                .attr("x", d => {
+                    return xScale_none(d[0])
+                })
+                .attr("y", d =>  yScale_none(d[1]))
+                .attr("width", xScale_none.bandwidth)
+                .attr("height", d => height_bar - margin_bar- yScale_none(d[1]))
+                .attr("fill", "Orange")
+                ),
+            exit => exit.call(exit=> exit.transition()
+                .duration(10)
+                .attr("x", d => {
+                    return xScale_none(d[0])
+                })
+                .attr("y", d =>  yScale_none(d[1]))
+                .attr("width", xScale_none.bandwidth)
+                .attr("height", d => height_bar - margin_bar- yScale_none(d[1]))
+                .attr("fill", "Orange")
+                .remove()
+                ),
+
+        )
+        .on("click", (e, d) => {
+            selected = d[0]
+            state.written_info = storage_scatter.filter(function(d){
+                return d.iyear == selected
+                });
+            objArray = state.written_info
+            console.log(objArray)
+            // console.log(objArray);
+            table_init();
+            window.location.href ="#General_Information";
+            })
+        xAxis_none_label.call(xAxis_none)
+        yAxis_none_label.call(yAxis_none)
+        xAxisLabel_none.text("Year")
+        yAxisLabel_none.text("Number of Attacks with No Fatailities or Wounded").attr("transform", "rotate(-90)")
+        AxisLabeltitle_none.text("Number of Attacks with No victim by" + state.Bargraph_2Seleceted)
+        if (d3.max(state.bar_plot_none.value) == 0){
+            none_wounded.text("There was a victim")
+        } else {
+            none_wounded.text("")
+        console.log()
+        }
+}
 // CSS Grid 
 // MOUSE ENTER< MOUSE OVER < MOUSE EXIT
 // ENTER AND EXIT RECOMMENDED 
 
-
+state.bar_plot_none
 
 // Columns I want 
 // iyear, imonth, iday , gname, city, attacktypye1_txt, target1, targetsub_type1_txt, target_type1_txt, weapdetail, weaptype_txt
@@ -590,7 +726,7 @@ function table_draw(){
     wounded = objArray.map(a => a.nwound)
     killed = objArray.map(a => a.nkill)
 
-
+    console.log(objArray)
     test = [month, day, year, city, gname, target, targetsubtype, attacktype, weapdetail, weapontype, wounded, killed]
     state.table = test[0].map((_, colIndex) => test.map(row => row[colIndex]))
     state.table_headers = ['Month', 'Day', 'Year', 'City of Attack', 
@@ -625,7 +761,7 @@ function table_draw(){
 ]       
     let headers = ['Month', 'Day', 'Year', 'City of Attack', 
     'Organization Name', 'Target of Attack', 'Target Category', 
-    'Attack Type', 'Weapon Details', 'Weapon Type'
+    'Attack Type', 'Weapon Details', 'Weapon Type', 'Number Wounded', 'Number Killed'
     ]
     table = d3.select("#Information").append("table")
     let thead = table.append("thead");
