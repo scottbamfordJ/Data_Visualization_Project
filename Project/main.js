@@ -56,7 +56,7 @@ let xAxisLabel_none
 let yAxisLabel_none
 let AxisLabeltitle_none
 let none_wounded
-let table;
+let table_end;
 let thead;
 let tbody;
 
@@ -704,8 +704,10 @@ function table_remove(){
     // Table.selectAll('tr').remove()
 }
 function table_init(){ 
- 
-    
+    if (table_end){
+        table_end.remove()
+    } 
+    table_end = d3.select("#Information").append("table")
     table_draw()
     
         
@@ -763,9 +765,8 @@ function table_draw(){
     'Organization Name', 'Target of Attack', 'Target Category', 
     'Attack Type', 'Weapon Details', 'Weapon Type', 'Number Wounded', 'Number Killed'
     ]
-    table = d3.select("#Information").append("table")
-    let thead = table.append("thead");
-    let tbody = table.append("tbody");
+    thead = table_end.append("thead");
+    tbody = table_end.append("tbody");
     thead.append('tr')
         .selectAll('th')
         .data(headers).enter()
@@ -773,14 +774,15 @@ function table_draw(){
         .text(function(d){return d})
 
     
-    rows = tbody.selectAll('tr').data(state.table)
-    rows.exit().remove()
-    rows = rows.enter().append("tr").merge(rows);
+    rows = tbody.selectAll('tr')
+    // rows.exit().remove()
+    rows = rows.data(state.table).enter().append("tr").merge(rows);
 
     var cells = rows.selectAll('td')
         .data(function(d, i) {
             return Object.values(d);
         });
+        
     cells.exit().remove();
     cells.enter().append("td")
         .text(function(d){

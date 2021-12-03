@@ -135,3 +135,8 @@ path.state {
   grid-row-start: 4;
   grid-row-end: 5;
 }
+
+th{ 
+  border-bottom:1px solid #000;
+  border-right:1px solid black
+}
