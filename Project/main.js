@@ -12,7 +12,7 @@ const width_1 = 1100,
     height_1 = 900,
     margin_1 = 30,
     radius_1 = 20;
-const width_bar = 500,
+const width_bar = 450,
     height_bar = 300,
     margin_bar = 50
 let svg, 
@@ -682,7 +682,7 @@ function draw_none(){
         yAxis_none_label.call(yAxis_none)
         xAxisLabel_none.text("Year")
         yAxisLabel_none.text("Number of Attacks with No Fatailities or Wounded").attr("transform", "rotate(-90)")
-        AxisLabeltitle_none.text("Number of Attacks with No victim by" + state.Bargraph_2Seleceted)
+        AxisLabeltitle_none.text("Number of Attacks with No victim by " + state.Bargraph_2Seleceted)
         if (d3.max(state.bar_plot_none.value) == 0){
             none_wounded.text("There was a victim")
         } else {
