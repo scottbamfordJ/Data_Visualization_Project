@@ -137,8 +137,10 @@ usSates.on("click", (ev, d) => {
     state.bargraph.Organizations = Array.from(state.bargraph.keys())
     // console.log(state.bargraph.Organizations)
     // console.log(state.bargraph.Attacks_Done)
+
     draw_bargraph();
     Remove_svg();
+    window.location.href ="#OrgBarChart"
     //Create New Function which removes the elements in the SVG;
    
 })
@@ -296,7 +298,9 @@ function draw_bargraph() {
                 console.log(state.scatter_plot_kills)
                 console.log(state.scatter_plot_wounded)
                 draw_killed();
-                draw_wounded()})
+                draw_wounded()
+                window.location.href ="#OrgBarKill";
+            })
         xAxisg.call(xAxis)
         yAxisg.call(yAxis).raise() // Raise Look It Up 
         xAxisLabel.text("Number Of Attacks")
@@ -410,6 +414,16 @@ function draw_killed(){
                 .remove()
                 ),
         )
+        .on("click", (e, d) => {
+            selected = d[0]
+            state.written_info = storage_scatter.filter(function(d){
+                return d.iyear == selected
+                });
+            objArray = state.written_info
+            // console.log(objArray);
+            table_init();
+            window.location.href ="#General_Information";
+            })
         xAxis_2.call(xAxis_scatter)
         yAxis_2.call(yAxis_scatter)
         xAxisLabel_nkills.text("Year")
@@ -526,6 +540,7 @@ function draw_wounded(){
             objArray = state.written_info
             // console.log(objArray);
             table_init();
+            window.location.href ="#General_Information";
             })
         xAxis_wounded_label.call(xAxis_wounded)
         yAxis_wounded_label.call(yAxis_wounded)

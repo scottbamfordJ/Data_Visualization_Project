@@ -9,7 +9,7 @@ h1 {
   font-size: 3em;
   margin: 0.25em 0;
 }
-
+html{scroll-behavior:smooth}
 h3 {
   font-size: 2em;
   margin: 0.25em 0;
