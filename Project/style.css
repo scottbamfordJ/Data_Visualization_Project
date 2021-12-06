@@ -1,7 +1,7 @@
 body {
   font-family: "Source Sans Pro", sans-serif;
   font-size: 16px;
-  padding: 1em;
+  padding: 60px;
   background: white;
 }
 
@@ -17,6 +17,48 @@ h3 {
 
 p {
   font-size: 1em;
+}
+#navbartitle{
+  text-align: center;
+  opacity:1;
+}
+/*#navbar {
+  overflow: hidden;
+  position: fixed; Set the navbar to fixed position 
+  background-color: rgb(204, 204, 204);
+  top: 40%; 
+  right: 0%;
+  width: 12%; 
+  opacity: 1;
+} */
+#navbar {
+  overflow: hidden;
+  background-color: #333;
+  position: fixed; /* Set the navbar to fixed position */
+  top: 0; /* Position the navbar at the top of the page */
+  width: 100%; /* Full width */
+  z-index: 3;
+}
+
+
+/* Links inside the navbar */
+#navbar a {
+  float: left;
+  display: block;
+  color: #f2f2f2;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+  z-index: 3;
+}
+
+/* Change background on mouse-over */
+#navbar a:hover {
+  background: gray;
+  color: white;
+}
+.main {
+  margin-top: 200px
 }
 
 #tooltip {
@@ -79,7 +121,6 @@ path.state {
   stroke: black;
 }
 
-/* Change Pointer to Click. */
 .container{
   display:grid;
   grid-template-columns: 1/1/1/1;
@@ -97,7 +138,7 @@ path.state {
   grid-column-end: 4;
   grid-row-start: 1;
   grid-row-end: 2;
-  z-index: 20;
+  z-index: 2;
 }
 /* #bargraph{
   grid-column-start: 2;
