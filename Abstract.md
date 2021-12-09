@@ -1,4 +1,4 @@
-##[Abstract for United State Terrorism for 1970 - 2018](https://scottbamfordj.github.io/Data_Visualization_Project/Project/)
+## [Abstract for United State Terrorism for 1970 - 2018](https://scottbamfordj.github.io/Data_Visualization_Project/Project/)
 
 ### Inspiration
 The inspiration for this project is my focus and interest into Terrorism. As an undergraduate I majored in International Relations and took many classes on Terrorism. I find terrorism an unexplored area in which modern day Data Analytics as well as Data visualizations hasn't fully entered. I believe that we're able to develop multiple different way of expressing Terrorist Attacks as well as using the data produce predictions and a pattern for why targets are selected and how the specific terrorist attack is done. 
