@@ -25,7 +25,7 @@ Terrorism in general is also very interesting to understand as well as identify 
 My Question for this project is where and how many terrorist attacks actually happen in the United States? How many people are affected as well as on those specific attacks who are they focusing on and how are they accomplishing these attacks?
 
 ### Users
-THe intended users are statisitcs junkies who are insterested in the actual numbers behind terrorist attacks.
+The intended users are statisitcs junkies who are insterested in the actual numbers behind terrorist attacks.
 
 ### Data
 The Dataset is from the GTD from 1970 - 2018. The database is from the Global Terrorism Database, apart of the START project, funded by Homeland Security. They're tasked with pooling, note taking, and categorizing terrorist attacks. 
