@@ -6,7 +6,6 @@ Post 9/11 Terrorism has become a hot topic in not only evidence for defense spen
 
 The GTD is an amazing source for terrorism centered information as well as terrorism datasets. But not many will take the time to read as well as inform themselves on the actuality that is terrorism. Specifically, the different groups and the frequency and body count these organizations have. The goal of this project is to focus on the United States and allow for an explorable United States map which identifies the number of attacks from 1970 - 2018. And identify the areas in which these terrorism organizations plan and attack these areas. Another goal of the project is to see the spread of attacks within each organization.
 
-Originally the GTD Dataset covers terrorism in the world from 1970 - 2018. Although this is great, I felt for the sake of focusing the goal of the website I’ve just used the United States Terrorist Attacks.
 
 
 
@@ -15,4 +14,6 @@ Originally the GTD Dataset covers terrorism in the world from 1970 - 2018. Altho
 ![Alt text](Deliverables/UnitedStateTerrorism_Images.png )
 
 The United States with its status as a first world country has attempted and tried to display itself as un affected or plagued by Terrorism, and instead try to describe its self as a combatant of Terrorism. Because of this when a terrorist attack happens, many are shocked and are bewildered that such a thing has happened within the warm and "safe" boundaries of the United States. This tool is seeking to help enlighten as well as answer questions regarding the regularity of United States Terrorism as well as the location and repercussions of said attacks.
+
+### [Abstract] 
 
