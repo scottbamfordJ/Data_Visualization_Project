@@ -9,3 +9,6 @@ The GTD is an amazing source for terrorism centered information as well as terro
 
 ## [United States Terrorism from 1970 - 2018](https://scottbamfordj.github.io/Data_Visualization_Project/Project/)
 Orginally the GTD Dataset covers terrorism in the world from 1970 - 2018. Although this is great, I felt for the sake of focusing the goal of the website i've just used the United States Terrorist Attacks. 
+
+
+![Alt text](scottbamfordJ//Data_Visualization_Project/Deliverables/UnitedStateTerrorism_Images.png )
