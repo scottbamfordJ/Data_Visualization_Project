@@ -17,5 +17,6 @@ The United States with its status as a first world country has attempted and tri
 
 ## [Abstract for United State Terrorism for 1970 - 2018](https://scottbamfordj.github.io/Data_Visualization_Project/Deliverables/Abstract.html)
 
-## [Reflection](https://scottbamfordj.github.io/Data_Visualization_Project/Deliverables/Reflection.html)
+## [Data for United States](https://scottbamfordj.github.io/Data_Visualization_Project/Deliverables/Data.html)
+## [Reflection on Assignment](https://scottbamfordj.github.io/Data_Visualization_Project/Deliverables/Reflection.html)
 
