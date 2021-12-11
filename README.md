@@ -13,7 +13,8 @@ The GTD is an amazing source for terrorism centered information as well as terro
 
 ![Alt text](Deliverables/UnitedStateTerrorism_Images.png )
 
-The United States with its status as a first world country has attempted and tried to display itself as un affected or plagued by Terrorism, and instead try to describe its self as a combatant of Terrorism. Because of this when a terrorist attack happens, many are shocked and are bewildered that such a thing has happened within the warm and "safe" boundaries of the United States. This tool is seeking to help enlighten as well as answer questions regarding the regularity of United States Terrorism as well as the location and repercussions of said attacks.
+The United States with its status as a first world country and is considered a main combatant of Terrorism. The United States has many international operations and resources used to prevent 
+terrorism in the foriegn countries, as well as locally. But this doesn't mean that local terrorism is curbed and impossible to happen within the United States espeically post 9/11 US. But terrorism hasn't just come about in the 2000's. This project is used to visualize terrorism in the US from 1970 - 2018 as well as look at not only the spread of terrorist attacks but also the impact on human lives in both number of killed and wounded. 
 
 ## [Abstract for United State Terrorism for 1970 - 2018](https://scottbamfordj.github.io/Data_Visualization_Project/Deliverables/Abstract.html)
 
